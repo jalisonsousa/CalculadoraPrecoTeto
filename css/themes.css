@@ -1,0 +1,75 @@
+/* ===== DARK THEME ===== */
+:root[data-theme="dark"] {
+  --bg:            #111827;
+  --bg2:           #1a2332;
+  --bg3:           #1f2d40;
+  --surface:       rgba(255,255,255,0.04);
+  --surface2:      rgba(255,255,255,0.07);
+  --border:        rgba(99,179,237,0.16);
+  --border2:       rgba(99,179,237,0.32);
+  --text:          #e2e8f0;
+  --text2:         #94a3b8;
+  --text3:         #475569;
+  --accent:        #60a5fa;
+  --accent2:       #93c5fd;
+  --accent-glow:   rgba(96,165,250,0.12);
+  --gold:          #fbbf24;
+  --green:         #4ade80;
+  --orange:        #fb923c;
+  --red:           #f87171;
+  --green-bg:      rgba(74,222,128,0.10);
+  --orange-bg:     rgba(251,146,60,0.10);
+  --red-bg:        rgba(248,113,113,0.10);
+  --green-border:  rgba(74,222,128,0.25);
+  --orange-border: rgba(251,146,60,0.25);
+  --red-border:    rgba(248,113,113,0.25);
+  --header-bg:     #1a2332;
+  --tab-bar-bg:    rgba(17,24,39,0.97);
+  --scroll-track:  #1a2332;
+  --scroll-thumb:  #60a5fa;
+  --tooltip-bg:    #1e2d42;
+  --footer-border: rgba(99,179,237,0.1);
+  --footer-text:   #94a3b8;
+  --save-time:     #94a3b8;
+  --th-bg:         #1a2332;
+  --th-result-bg:  #152030;
+  --spinner-color: #475569;
+}
+
+/* ===== LIGHT THEME ===== */
+:root[data-theme="light"] {
+  --bg:            #f1f5f9;
+  --bg2:           #ffffff;
+  --bg3:           #e8eef5;
+  --surface:       rgba(255,255,255,0.85);
+  --surface2:      rgba(255,255,255,1);
+  --border:        rgba(37,99,235,0.15);
+  --border2:       rgba(37,99,235,0.32);
+  --text:          #1e293b;
+  --text2:         #475569;
+  --text3:         #94a3b8;
+  --accent:        #2563eb;
+  --accent2:       #3b82f6;
+  --accent-glow:   rgba(37,99,235,0.10);
+  --gold:          #b45309;
+  --green:         #16a34a;
+  --orange:        #c2410c;
+  --red:           #dc2626;
+  --green-bg:      rgba(22,163,74,0.08);
+  --orange-bg:     rgba(194,65,12,0.08);
+  --red-bg:        rgba(220,38,38,0.08);
+  --green-border:  rgba(22,163,74,0.25);
+  --orange-border: rgba(194,65,12,0.25);
+  --red-border:    rgba(220,38,38,0.25);
+  --header-bg:     #ffffff;
+  --tab-bar-bg:    rgba(241,245,249,0.97);
+  --scroll-track:  #e2e8f0;
+  --scroll-thumb:  #3b82f6;
+  --tooltip-bg:    #eff6ff;
+  --footer-border: rgba(37,99,235,0.12);
+  --footer-text:   #64748b;
+  --save-time:     #64748b;
+  --th-bg:         #f0f6ff;
+  --th-result-bg:  #e8f0fe;
+  --spinner-color: #94a3b8;
+}
