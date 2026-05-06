@@ -1,480 +1,540 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora Preço Teto | Ações & FIIs</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
-    body { background: #060d14; color: #e2e8f0; }
+    /* ===== DARK THEME ===== */
+    :root[data-theme="dark"] {
+      --bg:            #111827;
+      --bg2:           #1a2332;
+      --bg3:           #1f2d40;
+      --surface:       rgba(255,255,255,0.04);
+      --surface2:      rgba(255,255,255,0.07);
+      --border:        rgba(99,179,237,0.16);
+      --border2:       rgba(99,179,237,0.32);
+      --text:          #e2e8f0;
+      --text2:         #94a3b8;
+      --text3:         #475569;
+      --accent:        #60a5fa;
+      --accent2:       #93c5fd;
+      --accent-glow:   rgba(96,165,250,0.12);
+      --gold:          #fbbf24;
+      --green:         #4ade80;
+      --orange:        #fb923c;
+      --red:           #f87171;
+      --green-bg:      rgba(74,222,128,0.10);
+      --orange-bg:     rgba(251,146,60,0.10);
+      --red-bg:        rgba(248,113,113,0.10);
+      --green-border:  rgba(74,222,128,0.25);
+      --orange-border: rgba(251,146,60,0.25);
+      --red-border:    rgba(248,113,113,0.25);
+      --header-bg:     #1a2332;
+      --tab-bar-bg:    rgba(17,24,39,0.97);
+      --scroll-track:  #1a2332;
+      --scroll-thumb:  #60a5fa;
+      --tooltip-bg:    #1e2d42;
+      --footer-border: rgba(99,179,237,0.1);
+      --footer-text:   #94a3b8;
+      --save-time:     #475569;
+      --th-bg:         #1a2332;
+      --th-result-bg:  #152030;
+      --spinner-color: #475569;
+    }
+    /* ===== LIGHT THEME ===== */
+    :root[data-theme="light"] {
+      --bg:            #f1f5f9;
+      --bg2:           #ffffff;
+      --bg3:           #e8eef5;
+      --surface:       rgba(255,255,255,0.85);
+      --surface2:      rgba(255,255,255,1);
+      --border:        rgba(37,99,235,0.15);
+      --border2:       rgba(37,99,235,0.32);
+      --text:          #1e293b;
+      --text2:         #475569;
+      --text3:         #94a3b8;
+      --accent:        #2563eb;
+      --accent2:       #3b82f6;
+      --accent-glow:   rgba(37,99,235,0.10);
+      --gold:          #b45309;
+      --green:         #16a34a;
+      --orange:        #c2410c;
+      --red:           #dc2626;
+      --green-bg:      rgba(22,163,74,0.08);
+      --orange-bg:     rgba(194,65,12,0.08);
+      --red-bg:        rgba(220,38,38,0.08);
+      --green-border:  rgba(22,163,74,0.25);
+      --orange-border: rgba(194,65,12,0.25);
+      --red-border:    rgba(220,38,38,0.25);
+      --header-bg:     #ffffff;
+      --tab-bar-bg:    rgba(241,245,249,0.97);
+      --scroll-track:  #e2e8f0;
+      --scroll-thumb:  #3b82f6;
+      --tooltip-bg:    #eff6ff;
+      --footer-border: rgba(37,99,235,0.12);
+      --footer-text:   #64748b;
+      --save-time:     #64748b;
+      --th-bg:         #f0f6ff;
+      --th-result-bg:  #e8f0fe;
+      --spinner-color: #94a3b8;
+    }
+
+    * { font-family: 'Inter', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0b1620; }
-    ::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 3px; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--scroll-track); }
+    ::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 3px; }
 
-    /* Header gradient */
-    .header-bg {
-      background: linear-gradient(135deg, #020f1a 0%, #061e2e 40%, #051825 70%, #030e18 100%);
-      border-bottom: 1px solid rgba(6,182,212,0.25);
+    /* ===== Number input spinners - subtle color ===== */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      opacity: 0.35;
+      filter: var(--spinner-filter, none);
+    }
+    [data-theme="dark"] input[type=number]::-webkit-inner-spin-button,
+    [data-theme="dark"] input[type=number]::-webkit-outer-spin-button {
+      filter: invert(0.7) sepia(1) hue-rotate(190deg) saturate(0.5) brightness(0.6);
+      opacity: 0.5;
     }
 
-    /* Tab styles */
-    .tab-btn { transition: all 0.3s ease; position: relative; }
-    .tab-btn.active {
-      background: linear-gradient(135deg, #0891b2, #06b6d4);
-      color: white;
-      box-shadow: 0 4px 20px rgba(6,182,212,0.35);
+    /* ===== HEADER ===== */
+    header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.12);
     }
-    .tab-btn:not(.active):hover { background: rgba(6,182,212,0.12); }
 
-    /* Cards */
-    .glass-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(6,182,212,0.15);
+    .logo-badge {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    /* ===== THEME TOGGLE ===== */
+    .theme-toggle {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text2);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ===== SAVE / EXPORT / IMPORT BUTTONS ===== */
+    .action-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 3px 12px var(--accent-glow);
+    }
+    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-primary.saved {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 3px 12px rgba(34,197,94,0.25);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text2);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+    .btn-danger {
+      background: var(--red-bg);
+      color: var(--red);
+      border-color: var(--red-border);
+    }
+    .btn-danger:hover { filter: brightness(1.08); }
+
+    .save-time {
+      font-size: 11px;
+      color: var(--save-time);
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    /* ===== TABS ===== */
+    .tab-bar {
+      background: var(--tab-bar-bg);
       backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 20;
     }
-    .info-card {
-      background: linear-gradient(135deg, rgba(6,182,212,0.07), rgba(8,145,178,0.03));
-      border: 1px solid rgba(6,182,212,0.2);
+    .tab-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 20px;
+      border-radius: 7px;
+      font-weight: 600; font-size: 13px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      color: var(--text2);
+      background: transparent;
+    }
+    .tab-btn:hover:not(.active) { background: var(--accent-glow); border-color: var(--border2); color: var(--accent); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 3px 12px var(--accent-glow);
     }
 
-    /* Table styles */
+    /* ===== CARDS ===== */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+    .card-accent { background: var(--accent-glow); border: 1px solid var(--border2); border-radius: 14px; }
+
+    /* ===== TABLE ===== */
     .calc-table { border-collapse: collapse; width: 100%; }
     .calc-table th {
-      background: linear-gradient(135deg, #061e2e, #041525);
-      color: #67e8f9;
-      font-size: 11px;
-      font-weight: 600;
+      background: var(--th-bg);
+      color: var(--accent2);
+      font-size: 10.5px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 12px 10px;
-      border-bottom: 2px solid rgba(6,182,212,0.35);
+      padding: 11px 10px;
+      border-bottom: 2px solid var(--border2);
       white-space: nowrap;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      position: sticky; top: 0; z-index: 10;
     }
+    .calc-table th.result-col { background: var(--th-result-bg); }
     .calc-table td {
-      padding: 8px 6px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 7px 6px;
+      border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
-    .calc-table tr:hover td { background: rgba(6,182,212,0.05); }
+    .calc-table tr:hover td { background: var(--accent-glow); }
+    .row-opp td { background: rgba(74,222,128,0.05) !important; }
+    .row-opp td:first-child { box-shadow: inset 3px 0 0 var(--green); }
+    .row-opp:hover td { background: rgba(74,222,128,0.09) !important; }
 
-    /* Opportunity row highlight */
-    .row-opp td { background: rgba(16,185,129,0.06) !important; }
-    .row-opp td:first-child {
-      box-shadow: inset 3px 0 0 #10b981;
-      border-radius: 0;
-    }
-    .row-opp:hover td { background: rgba(16,185,129,0.1) !important; }
-    .opp-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      background: rgba(16,185,129,0.15);
-      color: #34d399;
-      border: 1px solid rgba(16,185,129,0.3);
-      border-radius: 4px;
-      padding: 1px 5px;
-      font-size: 9px;
-      font-weight: 700;
-      margin-left: 4px;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-
-    /* Inputs */
+    /* ===== INPUTS ===== */
     .table-input {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(6,182,212,0.18);
+      background: var(--surface2);
+      border: 1px solid var(--border);
       border-radius: 6px;
-      color: #e2e8f0;
-      padding: 6px 8px;
+      color: var(--text);
+      padding: 6px 7px;
       font-size: 13px;
-      width: 100%;
+      width: auto;
+      min-width: 0;
       transition: all 0.2s;
       text-align: center;
     }
     .table-input:focus {
       outline: none;
-      border-color: #06b6d4;
-      background: rgba(6,182,212,0.08);
-      box-shadow: 0 0 0 2px rgba(6,182,212,0.18);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
     }
     .ticker-input {
-      font-weight: 700;
-      font-size: 13px;
-      color: #67e8f9;
-      text-transform: uppercase;
-      text-align: left;
-      letter-spacing: 0.5px;
+      font-weight: 700; color: var(--accent2);
+      text-transform: uppercase; text-align: left;
+      letter-spacing: 0.5px; font-size: 12.5px;
     }
 
-    /* Result cells */
+    /* ===== RESULT CELLS ===== */
     .result-cell {
-      font-weight: 600;
-      font-size: 13px;
-      text-align: center;
-      padding: 8px 10px;
-      border-radius: 6px;
-      white-space: nowrap;
+      font-weight: 600; font-size: 13px;
+      text-align: center; border-radius: 6px;
+      white-space: nowrap; padding: 4px 8px;
+      display: inline-flex; align-items: center;
+      justify-content: center; gap: 4px;
     }
-    .result-neutral { color: #94a3b8; background: rgba(255,255,255,0.03); }
-    .margin-good { color: #4ade80; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-radius: 6px; padding: 4px 8px; }
-    .margin-warn { color: #fb923c; background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.2); border-radius: 6px; padding: 4px 8px; }
-    .margin-bad  { color: #f87171; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); border-radius: 6px; padding: 4px 8px; }
-    .preco-teto-cell { color: #fbbf24; font-weight: 700; font-size: 13px; }
+    .result-neutral { color: var(--text2); }
+    .preco-teto-cell { color: var(--gold); font-weight: 700; }
+    .margin-good { color: var(--green); background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 6px; padding: 4px 9px; }
+    .margin-warn { color: var(--orange); background: var(--orange-bg); border: 1px solid var(--orange-border); border-radius: 6px; padding: 4px 9px; }
+    .margin-bad  { color: var(--red);   background: var(--red-bg);   border: 1px solid var(--red-border);   border-radius: 6px; padding: 4px 9px; }
 
-    /* Global floating tooltip */
-    #g-tip {
-      position: fixed;
-      z-index: 9999;
-      background: #071b28;
-      border: 1px solid rgba(6,182,212,0.4);
-      border-radius: 10px;
-      padding: 11px 14px;
-      width: 250px;
-      font-size: 12px;
-      line-height: 1.55;
-      color: #a5f3fc;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(6,182,212,0.1);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.15s;
-      font-weight: 400;
-      text-transform: none;
-      letter-spacing: 0;
-    }
-    #g-tip.visible { opacity: 1; }
-    #g-tip::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 20px;
-      border: 6px solid transparent;
-      border-top-color: rgba(6,182,212,0.4);
-    }
-    #g-tip.flip-up::after { display: none; }
-    #g-tip.flip-down::before {
-      content: '';
-      position: absolute;
-      bottom: 100%;
-      left: 20px;
-      border: 6px solid transparent;
-      border-bottom-color: rgba(6,182,212,0.4);
-    }
-
-    /* Info icon */
-    .tip-icon {
-      color: rgba(103,232,249,0.5);
-      cursor: help;
-      font-size: 11px;
-      margin-left: 3px;
+    /* ===== OPP STAR — só ícone, sem texto ===== */
+    .opp-star {
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--green);
+      font-size: 10px;
+      margin-left: 5px;
       vertical-align: middle;
-      transition: color 0.2s;
+      flex-shrink: 0;
     }
-    .tip-icon:hover { color: #06b6d4; }
 
-    /* Delete btn */
-    .del-btn { color: rgba(248,113,113,0.35); cursor: pointer; transition: color 0.2s; padding: 4px 6px; }
-    .del-btn:hover { color: #f87171; }
+    /* ===== DEL BTN ===== */
+    .del-btn { color: rgba(248,113,113,0.3); cursor: pointer; transition: color 0.2s; padding: 4px 6px; font-size: 14px; }
+    .del-btn:hover { color: var(--red); }
 
-    /* Add row btn */
+    /* ===== ADD ROW BTN ===== */
     .add-row-btn {
-      background: rgba(6,182,212,0.08);
-      border: 1px dashed rgba(6,182,212,0.35);
-      color: #67e8f9;
-      border-radius: 8px;
-      padding: 10px 20px;
+      background: var(--accent-glow);
+      border: 1.5px dashed var(--border2);
+      color: var(--accent2);
+      border-radius: 9px;
+      padding: 9px 20px;
       cursor: pointer;
       transition: all 0.2s;
       font-size: 13px;
-      font-weight: 500;
-    }
-    .add-row-btn:hover { background: rgba(6,182,212,0.16); border-color: #06b6d4; }
-
-    /* Guide section */
-    .guide-step {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(6,182,212,0.12);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-    .step-num {
-      background: linear-gradient(135deg, #0891b2, #06b6d4);
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(6,182,212,0.15);
-      color: #67e8f9;
-      border: 1px solid rgba(6,182,212,0.25);
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-size: 10px;
       font-weight: 600;
     }
-    .badge-green  { background: rgba(74,222,128,0.1);  color: #4ade80; border-color: rgba(74,222,128,0.3); }
-    .badge-orange { background: rgba(251,146,60,0.1);  color: #fb923c; border-color: rgba(251,146,60,0.3); }
-    .badge-red    { background: rgba(248,113,113,0.1); color: #f87171; border-color: rgba(248,113,113,0.3); }
+    .add-row-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 
-    /* Summary stats */
-    .stat-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(6,182,212,0.12);
-      border-radius: 10px;
-      padding: 14px 18px;
-      text-align: center;
+    /* ===== GUIDE STEPS ===== */
+    .guide-step { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 13px 15px; }
+    .step-num {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border-radius: 50%;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
     }
 
-    /* Tab content */
+    /* ===== BADGES ===== */
+    .badge { display: inline-block; background: var(--accent-glow); color: var(--accent2); border: 1px solid var(--border2); border-radius: 4px; padding: 1px 6px; font-size: 10px; font-weight: 600; }
+    .badge-green  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+    .badge-orange { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }
+    .badge-red    { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
+
+    /* ===== STAT CARDS ===== */
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 15px 18px; text-align: center; transition: border-color 0.2s; }
+    .stat-card:hover { border-color: var(--border2); }
+
+    /* ===== TABLE SCROLL ===== */
+    .table-scroll { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+
+    /* ===== TAB CONTENT ===== */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Table scroll wrapper — overflow visible so tooltip escapes */
-    .table-scroll { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(6,182,212,0.12); }
-
-    /* Animations */
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-in { animation: fadeIn 0.3s ease forwards; }
-
-    /* Logo animation */
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.3); }
-      50%       { box-shadow: 0 0 40px rgba(6,182,212,0.65); }
+    /* ===== EXT LINKS ===== */
+    .ext-link {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text2); font-size: 12px; font-weight: 500;
+      text-decoration: none; transition: all 0.2s;
     }
-    .logo-icon { animation: pulse-glow 2s ease-in-out infinite; }
+    .ext-link:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Accent color helpers */
-    .text-accent { color: #06b6d4; }
-    .text-accent-light { color: #67e8f9; }
-    .text-gold { color: #fbbf24; }
+    /* ===== TOOLTIP ===== */
+    #g-tip {
+      position: fixed; z-index: 9999;
+      background: var(--tooltip-bg);
+      border: 1px solid var(--border2);
+      border-radius: 10px; padding: 11px 14px;
+      width: 250px; font-size: 12px; line-height: 1.55;
+      color: var(--text2);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      pointer-events: none; opacity: 0; transition: opacity 0.15s;
+    }
+    #g-tip.visible { opacity: 1; }
+    #g-tip::after { content:''; position:absolute; top:100%; left:20px; border:6px solid transparent; border-top-color: var(--border2); }
+    #g-tip.flip-down::after { display:none; }
+    #g-tip.flip-down::before { content:''; position:absolute; bottom:100%; left:20px; border:6px solid transparent; border-bottom-color:var(--border2); }
+
+    .tip-icon { color: var(--border2); cursor: help; font-size: 11px; margin-left: 3px; vertical-align: middle; transition: color 0.2s; }
+    .tip-icon:hover { color: var(--accent); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    .animate-in { animation: fadeIn 0.25s ease forwards; }
+
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 11px 18px;
+      display: flex; align-items: center; gap: 9px;
+      font-size: 13px; font-weight: 600; color: var(--text);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      transform: translateY(70px); opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    .toast-icon { color: var(--green); font-size: 15px; }
+    .toast-icon.warn { color: var(--orange); }
+
+    /* ===== DETAILS ===== */
+    details summary { user-select: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] summary .chevron { transform: rotate(180deg); }
+    .chevron { transition: transform 0.2s; display: inline-block; }
+
   </style>
 </head>
 <body>
 
-<!-- Global floating tooltip -->
 <div id="g-tip"></div>
+<div id="toast"><i class="fa-solid fa-floppy-disk toast-icon" id="toast-icon"></i><span id="toast-msg">Dados salvos!</span></div>
+
 
 <!-- ===== HEADER ===== -->
-<header class="header-bg py-6 px-6 mb-0">
+<header class="py-4 px-6">
   <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
-    <div class="flex items-center gap-4">
-      <div class="logo-icon w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-           style="background: linear-gradient(135deg,#0891b2,#06b6d4)">
-        <i class="fa-solid fa-chart-line text-white text-xl"></i>
+    <div class="flex items-center gap-3">
+      <div class="logo-badge w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-chart-line text-white" style="font-size:17px"></i>
       </div>
       <div>
-        <h1 class="text-2xl font-bold"
-            style="background: linear-gradient(90deg,#67e8f9,#fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-          Calculadora Preço Teto
+        <h1 style="font-size:18px;font-weight:700;color:var(--text)">
+          Preço Teto <span style="color:var(--accent)">·</span> <span style="color:var(--accent2)">Ações & FIIs</span>
         </h1>
-        <p class="text-xs opacity-60" style="color:#a5f3fc">Ações &amp; FIIs · Metodologia A Cara da Riqueza · Dados: Investidor10</p>
+        <p style="font-size:11px;color:var(--text2);margin-top:1px">Metodologia A Cara da Riqueza · via Investidor10</p>
       </div>
     </div>
-    <div class="flex gap-3 text-xs">
-      <a href="https://investidor10.com.br" target="_blank"
-         class="flex items-center gap-2 px-3 py-2 rounded-lg transition"
-         style="background:rgba(255,255,255,0.04); border:1px solid rgba(6,182,212,0.2); color:#67e8f9;">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i> Investidor10
-      </a>
-      <a href="https://www.fundsexplorer.com.br" target="_blank"
-         class="flex items-center gap-2 px-3 py-2 rounded-lg transition"
-         style="background:rgba(255,255,255,0.04); border:1px solid rgba(6,182,212,0.2); color:#67e8f9;">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i> Funds Explorer
-      </a>
-      <a href="https://www.youtube.com/@ACaraDaRiqueza" target="_blank"
-         class="flex items-center gap-2 px-3 py-2 rounded-lg transition"
-         style="background:rgba(255,255,255,0.04); border:1px solid rgba(6,182,212,0.2); color:#67e8f9;">
-        <i class="fa-brands fa-youtube"></i> Canal
-      </a>
+
+    <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex gap-1.5">
+        <a href="https://investidor10.com.br" target="_blank" class="ext-link">
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px"></i> Investidor10
+        </a>
+        <a href="https://www.fundsexplorer.com.br" target="_blank" class="ext-link">
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px"></i> Funds Explorer
+        </a>
+        <a href="https://www.youtube.com/@ACaraDaRiqueza" target="_blank" class="ext-link">
+          <i class="fa-brands fa-youtube" style="font-size:10px"></i> Canal
+        </a>
+      </div>
+
+      <div style="width:1px;height:26px;background:var(--border)"></div>
+
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <i id="theme-icon" class="fa-solid fa-moon"></i>
+        <span id="theme-label">Escuro</span>
+      </button>
+
+      <!-- Ações da nuvem -->
+      <button class="action-btn btn-secondary" onclick="exportData()" title="Baixar JSON como backup local">
+        <i class="fa-solid fa-download"></i> Exportar
+      </button>
+      <div id="cloud-status" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)">
+        <i class="fa-solid fa-cloud" style="font-size:13px"></i>
+        <span id="cloud-label">Carregando...</span>
+      </div>
+      <button class="action-btn btn-primary" onclick="saveData()" id="save-btn">
+        <i class="fa-solid fa-floppy-disk"></i> Salvar na nuvem
+      </button>
+      <span class="save-time" id="save-time"></span>
     </div>
   </div>
 </header>
 
-<!-- ===== TABS ===== -->
-<div class="sticky top-0 z-20 px-6 py-3"
-     style="background:rgba(6,13,20,0.96); backdrop-filter:blur(10px); border-bottom:1px solid rgba(6,182,212,0.12);">
+<!-- ===== TAB BAR ===== -->
+<div class="tab-bar px-6 py-2">
   <div class="max-w-7xl mx-auto flex gap-2">
-    <button id="tab-btn-acoes"
-            class="tab-btn active flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm"
-            onclick="switchTab('acoes')">
+    <button id="tab-btn-acoes" class="tab-btn active" onclick="switchTab('acoes')">
       <i class="fa-solid fa-building-columns"></i> Ações
     </button>
-    <button id="tab-btn-fiis"
-            class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm"
-            onclick="switchTab('fiis')"
-            style="color:#94a3b8; background:rgba(255,255,255,0.03); border:1px solid rgba(6,182,212,0.12);">
+    <button id="tab-btn-fiis" class="tab-btn" onclick="switchTab('fiis')">
       <i class="fa-solid fa-city"></i> FIIs
     </button>
   </div>
 </div>
 
-<main class="max-w-7xl mx-auto px-4 py-6">
+<main class="max-w-7xl mx-auto px-4 py-5">
 
-<!-- ============================= AÇÕES TAB ============================= -->
+<!-- ========================= AÇÕES TAB ========================= -->
 <div id="tab-acoes" class="tab-content active animate-in">
 
-  <!-- Methodology Card -->
-  <div class="info-card rounded-2xl p-5 mb-5">
+  <div class="card-accent p-5 mb-5">
     <div class="flex items-start gap-4">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-           style="background:linear-gradient(135deg,#0891b2,#06b6d4)">
-        <i class="fa-solid fa-calculator text-white"></i>
+      <div class="logo-badge w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-calculator text-white" style="font-size:14px"></i>
       </div>
       <div class="flex-1">
-        <h2 class="font-bold text-lg mb-2 text-accent-light">Como funciona o Preço Teto de Ações</h2>
-        <p class="text-sm text-gray-400 mb-3">
+        <h2 style="font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:8px">Como funciona o Preço Teto de Ações</h2>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">
           O preço teto é o valor máximo que você pode pagar por uma ação mantendo a rentabilidade desejada.
-          A metodologia projeta o lucro futuro da empresa e calcula quanto você precisaria pagar hoje para
-          receber o dividendo desejado no futuro.
+          A metodologia projeta o lucro futuro e calcula quanto pagar hoje para receber o dividendo desejado no futuro.
         </p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">① LPA Futuro</div>
-            <code class="text-xs text-gold">LPA × (1 + CAGR)^Tempo</code>
-            <p class="text-xs text-gray-500 mt-1">Lucro futuro projetado</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">① LPA Futuro</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">LPA × (1 + CAGR)^Tempo</code>
+            <p style="font-size:11px;color:var(--text2)">Lucro futuro projetado</p>
           </div>
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">② Dividendo Futuro</div>
-            <code class="text-xs text-gold">LPA Futuro × Payout</code>
-            <p class="text-xs text-gray-500 mt-1">Dividendo esperado no futuro</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">② Dividendo Futuro</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">LPA Futuro × Payout</code>
+            <p style="font-size:11px;color:var(--text2)">Dividendo esperado</p>
           </div>
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">③ Preço Teto</div>
-            <code class="text-xs text-gold">Div. Futuro ÷ DY Desejado</code>
-            <p class="text-xs text-gray-500 mt-1">Preço máximo a pagar</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">③ Preço Teto</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">Div. Futuro ÷ DY Des.</code>
+            <p style="font-size:11px;color:var(--text2)">Preço máximo a pagar</p>
           </div>
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">④ Margem Segurança</div>
-            <code class="text-xs text-gold">(P.Teto - P.Atual) ÷ P.Atual</code>
-            <p class="text-xs text-gray-500 mt-1">Desconto em relação ao teto</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">④ Margem Seg.</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">(P.Teto-P.Atual)÷P.Atual</code>
+            <p style="font-size:11px;color:var(--text2)">Desconto em relação ao teto</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Where to find guide -->
-  <details class="glass-card rounded-2xl p-4 mb-5 cursor-pointer">
-    <summary class="font-semibold text-sm text-accent-light flex items-center gap-2 list-none">
+  <details class="card p-4 mb-5 cursor-pointer">
+    <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
       <i class="fa-solid fa-map-pin"></i> Onde encontrar cada dado no Investidor10
-      <i class="fa-solid fa-chevron-down ml-auto text-xs opacity-60"></i>
+      <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
     </summary>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">1</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">Preço Atual</div>
-          <p class="text-xs text-gray-400 mt-1">No Investidor10, acesse a página da ação (ex: <code class="text-accent">investidor10.com.br/acoes/ITSA3</code>) → Preço exibido no topo</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">2</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">LPA Atual</div>
-          <p class="text-xs text-gray-400 mt-1">Página da ação → Aba <span class="badge">Indicadores</span> → Campo <span class="badge">LPA</span> (Lucro Por Ação)</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">3</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">Payout (%)</div>
-          <p class="text-xs text-gray-400 mt-1">Página da ação → Aba <span class="badge">Indicadores</span> → Campo <span class="badge">Payout</span>. É o % do lucro distribuído como dividendos</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">4</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">CAGR Lucros (%)</div>
-          <p class="text-xs text-gray-400 mt-1">Aba <span class="badge">Resultados</span> → Crescimento do lucro nos últimos 5 anos. Fórmula: <code class="text-gold">(LPA_atual/LPA_5a)^(1/5) - 1</code></p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">5</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">DY Desejado (%)</div>
-          <p class="text-xs text-gray-400 mt-1">Sua meta de rentabilidade. Padrão recomendado: <span class="badge">8%</span>. Compare com renda fixa atual para definir sua meta</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">6</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">Tempo (anos)</div>
-          <p class="text-xs text-gray-400 mt-1">Horizonte de projeção. Padrão recomendado: <span class="badge">5 anos</span>. Quanto maior o tempo, mais conservadora a projeção</p>
-        </div>
-      </div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → ação → preço no topo da página</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">LPA Atual</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">LPA</span></p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">Payout (%)</div>
+        <p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">Payout</span> — use média 3–5 anos</p>
+      </div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">CAGR (%)</div>
+        <p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Resultados</span> → crescimento do LPA. Fórmula: <code style="color:var(--gold)">(LPA_hoje/LPA_5a)^(1/5)−1</code></p>
+      </div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">DY Desejado (%)</div>
+        <p style="font-size:12px;color:var(--text2)">Sua meta de rentabilidade. Padrão: <span class="badge">8%</span></p>
+      </div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">6</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">Tempo (anos)</div>
+        <p style="font-size:12px;color:var(--text2)">Horizonte de projeção. Padrão: <span class="badge">5 anos</span></p>
+      </div></div>
     </div>
   </details>
 
-  <!-- Summary Stats -->
   <div id="acoes-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></div>
 
-  <!-- Table -->
   <div class="table-scroll mb-4">
-    <table class="calc-table" id="acoes-table">
+    <table class="calc-table">
       <thead>
         <tr>
-          <th style="min-width:100px">
-            <i class="fa-solid fa-tag mr-1"></i> Ação
-          </th>
-          <th style="min-width:100px">
-            Preço Atual
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Preço Atual</strong><br>Preço atual da ação na bolsa.<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> <strong>Onde achar:</strong><br>Investidor10 → Busque a ação → Preço exibido no topo da página"></i>
-          </th>
-          <th style="min-width:90px">
-            LPA Atual
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido dividido pelo nº de ações.<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> <strong>Onde achar:</strong><br>Investidor10 → Ação → Aba 'Indicadores' → Campo 'LPA'"></i>
-          </th>
-          <th style="min-width:85px">
-            Payout %
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos.<br><br><strong style='color:#fbbf24'>⚠ Não use só o último ano!</strong><br>Pegue a média dos últimos 3–5 anos para suavizar anos atípicos (ex: payout de 150% num ano extraordinário distorce o cálculo).<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> Investidor10 → Ação → Aba 'Indicadores' → Campo 'Payout' → veja o histórico"></i>
-          </th>
-          <th style="min-width:90px">
-            CAGR %
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>CAGR de Lucros — Média histórica</strong><br>Taxa de crescimento anual composta dos lucros.<br><br><strong style='color:#fbbf24'>⚠ Não use o CAGR do último ano!</strong><br>Use a média de crescimento dos últimos 3–5 anos. Ex: se o CAGR pontual está em 17% mas a média histórica é 10%, use 10% — mais conservador e consistente.<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> Investidor10 → Ação → Aba 'Resultados' → Observe o crescimento de LPA ano a ano.<br>Fórmula: (LPA_hoje ÷ LPA_5a)^(1/5) − 1"></i>
-          </th>
-          <th style="min-width:80px">
-            DY Des. %
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Dividend Yield Desejado</strong><br>A rentabilidade mínima que você quer via dividendos.<br><br><strong>Recomendado:</strong> 8% a.a.<br>Compare com a SELIC/renda fixa atual para definir sua meta."></i>
-          </th>
-          <th style="min-width:65px">
-            Tempo
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Tempo de Projeção (anos)</strong><br>Quantos anos à frente você está projetando o lucro.<br><br><strong>Recomendado:</strong> 5 anos — padrão do criador do método."></i>
-          </th>
-          <th style="min-width:95px; background:linear-gradient(135deg,#051c2e,#03121e)">
-            <span style="color:#7dd3fc">LPA Futuro</span>
-          </th>
-          <th style="min-width:100px; background:linear-gradient(135deg,#051c2e,#03121e)">
-            <span style="color:#7dd3fc">Div. Futuro</span>
-          </th>
-          <th style="min-width:105px; background:linear-gradient(135deg,#06151f,#020d15)">
-            <span style="color:#fbbf24"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span>
-          </th>
-          <th style="min-width:115px; background:linear-gradient(135deg,#06151f,#020d15)">
-            <span style="color:#7dd3fc">Margem Seg.</span>
-          </th>
-          <th style="width:40px; background:rgba(0,0,0,0.3)"></th>
+          <th style="min-width:115px"><i class="fa-solid fa-tag mr-1"></i> Ação</th>
+          <th style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual</strong><br>Cotação atual da ação. Investidor10 → busque a ação → preço no topo."></i></th>
+          <th style="min-width:80px">LPA Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido ÷ nº de ações. Investidor10 → Ação → Indicadores → LPA."></i></th>
+          <th style="min-width:80px">Payout % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos. Use média dos últimos 3–5 anos."></i></th>
+          <th style="min-width:72px">CAGR % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>CAGR de Lucros</strong><br>Taxa de crescimento anual do lucro. Use média histórica 3–5 anos."></i></th>
+          <th style="min-width:72px">DY Des. % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividend Yield Desejado</strong><br>Rentabilidade mínima desejada. Padrão: 8% a.a."></i></th>
+          <th style="min-width:60px">Tempo <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Tempo de Projeção (anos)</strong><br>Anos à frente para projetar o lucro. Padrão: 5 anos."></i></th>
+          <th class="result-col" style="min-width:95px"><span style="color:var(--accent2)">LPA Futuro</span></th>
+          <th class="result-col" style="min-width:100px"><span style="color:var(--accent2)">Div. Futuro</span></th>
+          <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
+          <th class="result-col" style="min-width:115px"><span style="color:var(--accent2)">Margem Seg.</span></th>
+          <th style="width:38px"></th>
         </tr>
       </thead>
       <tbody id="acoes-tbody"></tbody>
@@ -482,177 +542,90 @@
   </div>
 
   <div class="flex items-center gap-4 mb-6 flex-wrap">
-    <button class="add-row-btn" onclick="addAcoesRow()">
-      <i class="fa-solid fa-plus mr-2"></i> Adicionar Ação
-    </button>
-    <div class="flex gap-3 text-xs flex-wrap">
-      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full inline-block" style="background:#4ade80"></span> Oportunidade (&ge;15%)</span>
-      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full inline-block" style="background:#fb923c"></span> Próximo do teto (0–14%)</span>
-      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full inline-block" style="background:#f87171"></span> Acima do teto (caro)</span>
+    <button class="add-row-btn" onclick="addAcoesRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar Ação</button>
+    <div class="flex gap-3 flex-wrap" style="font-size:12px;color:var(--text2)">
+      <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
+      <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--orange)"></span> Próximo do teto (0–14%)</span>
+      <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--red)"></span> Acima do teto (caro)</span>
     </div>
   </div>
 </div>
 
-<!-- ============================= FIIs TAB ============================= -->
+<!-- ========================= FIIs TAB ========================= -->
 <div id="tab-fiis" class="tab-content animate-in">
 
-  <!-- Methodology Card -->
-  <div class="info-card rounded-2xl p-5 mb-5">
+  <div class="card-accent p-5 mb-5">
     <div class="flex items-start gap-4">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-           style="background:linear-gradient(135deg,#0891b2,#06b6d4)">
-        <i class="fa-solid fa-building text-white"></i>
+      <div class="logo-badge w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-building text-white" style="font-size:14px"></i>
       </div>
       <div class="flex-1">
-        <h2 class="font-bold text-lg mb-2 text-accent-light">Como funciona o Preço Teto de FIIs</h2>
-        <p class="text-sm text-gray-400 mb-3">
-          Para FIIs, o preço teto é calculado comparando com o rendimento do Tesouro IPCA+.
-          A rentabilidade desejada é composta por: proteção inflacionária do FII + taxa de referência (IPCA+) + prêmio de risco.
+        <h2 style="font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:8px">Como funciona o Preço Teto de FIIs</h2>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">
+          Para FIIs, o preço teto compara com o Tesouro IPCA+.
+          A rentabilidade desejada é: proteção inflacionária do FII + taxa IPCA+ + prêmio de risco.
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">Taxa Desejada</div>
-            <code class="text-xs text-gold">IPCA + IPCA+ + Prêmio</code>
-            <p class="text-xs text-gray-500 mt-1">Rentabilidade total que você quer ganhar</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">Taxa Desejada</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">IPCA + IPCA+ + Prêmio</code>
+            <p style="font-size:11px;color:var(--text2)">Rentabilidade total desejada</p>
           </div>
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">Preço Teto</div>
-            <code class="text-xs text-gold">Dividendo 12M ÷ Taxa Desejada</code>
-            <p class="text-xs text-gray-500 mt-1">Quanto você pode pagar pelo FII</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">Preço Teto</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">Dividendo 12M ÷ Taxa</code>
+            <p style="font-size:11px;color:var(--text2)">Quanto você pode pagar pelo FII</p>
           </div>
           <div class="guide-step">
-            <div class="text-xs font-semibold mb-1 text-accent">Margem de Segurança</div>
-            <code class="text-xs text-gold">(P.Teto − P.Atual) ÷ P.Atual</code>
-            <p class="text-xs text-gray-500 mt-1">Desconto em relação ao preço teto</p>
+            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">Margem de Segurança</div>
+            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">(P.Teto − P.Atual) ÷ P.Atual</code>
+            <p style="font-size:11px;color:var(--text2)">Desconto em relação ao preço teto</p>
           </div>
         </div>
-        <!-- IPCA types explanation -->
-        <div class="mt-4 p-3 rounded-xl" style="background:rgba(255,255,255,0.02); border:1px solid rgba(6,182,212,0.12);">
-          <p class="text-xs font-bold text-accent-light mb-2">
-            <i class="fa-solid fa-lightbulb mr-1"></i> Como definir o IPCA do FII:
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-            <div class="flex items-start gap-2">
-              <span class="badge badge-green mt-0.5">IPCA = 0%</span>
-              <span class="text-gray-400"><strong class="text-green-400">Tijolo</strong> (Shopping, Logístico, Laje) — valorização do imóvel já cobre a inflação</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="badge mt-0.5" style="background:rgba(251,191,36,0.1);color:#fbbf24;border-color:rgba(251,191,36,0.3);">IPCA = 5%</span>
-              <span class="text-gray-400"><strong class="text-yellow-400">Papel</strong> (CRI/CRA) — contratos indexados à inflação entregam IPCA nos dividendos</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="badge badge-orange mt-0.5">IPCA = 2,5%</span>
-              <span class="text-gray-400"><strong class="text-orange-400">Híbrido</strong> — mistura de tijolo e papel, use % proporcional da carteira</span>
-            </div>
+        <div class="mt-3 p-3 rounded-xl card">
+          <p style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:7px"><i class="fa-solid fa-lightbulb mr-1"></i> Como definir o IPCA do FII:</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2" style="font-size:12px">
+            <div class="flex items-start gap-2"><span class="badge badge-green mt-0.5">IPCA = 0%</span><span style="color:var(--text2)"><strong style="color:var(--green)">Tijolo</strong> — valorização do imóvel cobre inflação</span></div>
+            <div class="flex items-start gap-2"><span class="badge mt-0.5" style="background:rgba(251,191,36,0.1);color:var(--gold);border-color:rgba(251,191,36,0.3);">IPCA = 5%</span><span style="color:var(--text2)"><strong style="color:var(--gold)">Papel</strong> — CRIs/CRAs indexados ao IPCA</span></div>
+            <div class="flex items-start gap-2"><span class="badge badge-orange mt-0.5">IPCA = 2,5%</span><span style="color:var(--text2)"><strong style="color:var(--orange)">Híbrido</strong> — proporcional à carteira</span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Where to find guide -->
-  <details class="glass-card rounded-2xl p-4 mb-5 cursor-pointer">
-    <summary class="font-semibold text-sm text-accent-light flex items-center gap-2 list-none">
+  <details class="card p-4 mb-5 cursor-pointer">
+    <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
       <i class="fa-solid fa-map-pin"></i> Onde encontrar cada dado no Investidor10
-      <i class="fa-solid fa-chevron-down ml-auto text-xs opacity-60"></i>
+      <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
     </summary>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">1</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">P/VP</div>
-          <p class="text-xs text-gray-400 mt-1">Preço dividido pelo Valor Patrimonial. Investidor10 → FII → Aba <span class="badge">Indicadores</span> → Campo <span class="badge">P/VP</span></p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">2</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">Preço Atual</div>
-          <p class="text-xs text-gray-400 mt-1">Investidor10 → Busque o FII → Preço exibido no topo da página (cotação atual)</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">3</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">Dividendo 12M</div>
-          <p class="text-xs text-gray-400 mt-1">Investidor10 → FII → Aba <span class="badge">Proventos</span> → Some os dividendos pagos nos últimos 12 meses</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">4</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">IPCA do FII (%)</div>
-          <p class="text-xs text-gray-400 mt-1"><span class="badge badge-green">Tijolo=0%</span> <span class="badge" style="background:rgba(251,191,36,0.1);color:#fbbf24;">Papel=5%</span> <span class="badge badge-orange">Híbrido=2,5%</span>. Verifique o relatório gerencial do FII para precisão</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">5</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">IPCA+ (%)</div>
-          <p class="text-xs text-gray-400 mt-1">Taxa do Tesouro IPCA+ de longo prazo (vencimento 2035–2055). Padrão atual: <span class="badge">7%</span>. Consulte em tesouro.fazenda.gov.br</p>
-        </div>
-      </div>
-      <div class="guide-step flex items-start gap-3">
-        <div class="step-num">6</div>
-        <div>
-          <div class="text-xs font-bold text-accent-light">Prêmio (%)</div>
-          <p class="text-xs text-gray-400 mt-1">Risco extra vs. renda fixa. Padrão: <span class="badge">1–3%</span>. FIIs maiores/mais sólidos → menor prêmio</p>
-        </div>
-      </div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">P/VP</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → Indicadores → P/VP</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → preço no topo da página</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Dividendo 12M</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Proventos</span> → soma dos últimos 12 meses</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">IPCA do FII (%)</div><p style="font-size:12px;color:var(--text2)"><span class="badge badge-green">Tijolo=0%</span> <span class="badge" style="background:rgba(251,191,36,0.1);color:var(--gold);">Papel=5%</span> <span class="badge badge-orange">Híbrido=2,5%</span></p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">IPCA+ (%)</div><p style="font-size:12px;color:var(--text2)">Taxa Tesouro IPCA+ longo prazo. Padrão atual: ~7%</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">6</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Prêmio (%)</div><p style="font-size:12px;color:var(--text2)">Risco extra vs renda fixa. <span class="badge">1–3%</span> conforme solidez do FII</p></div></div>
     </div>
   </details>
 
-  <!-- Summary Stats -->
   <div id="fiis-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></div>
 
-  <!-- Table -->
   <div class="table-scroll mb-4">
-    <table class="calc-table" id="fiis-table">
+    <table class="calc-table">
       <thead>
         <tr>
-          <th style="min-width:95px">
-            <i class="fa-solid fa-building-columns mr-1"></i> FII
-          </th>
-          <th style="min-width:75px">
-            P/VP
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Preço / Valor Patrimonial</strong><br>Indica se o FII está sendo negociado acima (&gt;1) ou abaixo (&lt;1) do seu valor patrimonial.<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> Investidor10 → FII → Aba 'Indicadores' → P/VP"></i>
-          </th>
-          <th style="min-width:105px">
-            Preço Atual
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual do FII na B3.<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> Investidor10 → Busque o FII → Preço no topo"></i>
-          </th>
-          <th style="min-width:110px">
-            Div. 12M (R$)
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Dividendos — últimos 12 meses</strong><br>Soma de todos os proventos pagos por cota nos últimos 12 meses.<br><br><i class='fa-solid fa-location-dot' style='color:#06b6d4'></i> Investidor10 → FII → Aba 'Proventos' → Some os últimos 12 meses"></i>
-          </th>
-          <th style="min-width:80px">
-            IPCA %
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>IPCA do FII</strong><br>Proteção inflacionária que o FII entrega:<br>• Tijolo: 0% (imóveis se valorizam com inflação)<br>• Papel: ~5% (CRIs/CRAs indexados ao IPCA)<br>• Híbrido: ~2,5% (proporcional)<br><br>Verifique no relatório gerencial para precisão."></i>
-          </th>
-          <th style="min-width:80px">
-            IPCA+ %
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Taxa do Tesouro IPCA+ de longo prazo que serve como referência de rentabilidade real.<br><br><strong>Padrão atual: ~7%</strong><br>Consulte: tesouro.fazenda.gov.br"></i>
-          </th>
-          <th style="min-width:80px">
-            Prêmio %
-            <i class="fa-solid fa-circle-info tip-icon"
-               data-tip="<strong>Prêmio de Risco</strong><br>Rentabilidade extra que você exige por investir em FIIs vs. renda fixa segura.<br><br><strong>Referências:</strong><br>• FIIs grandes/consolidados: 1–2%<br>• FIIs médios: 2–3%<br>• FIIs menores/mais arriscados: 3–4%"></i>
-          </th>
-          <th style="min-width:65px; background:rgba(255,255,255,0.01)">
-            <span style="color:#94a3b8; font-size:10px">DY Total</span>
-          </th>
-          <th style="min-width:105px; background:linear-gradient(135deg,#06151f,#020d15)">
-            <span style="color:#fbbf24"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span>
-          </th>
-          <th style="min-width:115px; background:linear-gradient(135deg,#06151f,#020d15)">
-            <span style="color:#7dd3fc">Margem Seg.</span>
-          </th>
-          <th style="width:40px; background:rgba(0,0,0,0.3)"></th>
+          <th style="min-width:115px"><i class="fa-solid fa-building-columns mr-1"></i> FII</th>
+          <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
+          <th style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
+          <th style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
+          <th style="min-width:68px">IPCA % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>IPCA do FII</strong><br>Tijolo: 0% · Papel: ~5% · Híbrido: ~2,5%"></i></th>
+          <th style="min-width:68px">IPCA+ % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Tesouro IPCA+ longo prazo. Padrão atual: ~7%"></i></th>
+          <th style="min-width:68px">Prêmio % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Prêmio de Risco</strong><br>FIIs grandes: 1–2% · Médios: 2–3% · Menores: 3–4%"></i></th>
+          <th class="result-col" style="min-width:70px"><span style="color:var(--text2);font-size:10px">DY Total</span></th>
+          <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
+          <th class="result-col" style="min-width:115px"><span style="color:var(--accent2)">Margem Seg.</span></th>
+          <th style="width:38px"></th>
         </tr>
       </thead>
       <tbody id="fiis-tbody"></tbody>
@@ -660,367 +633,506 @@
   </div>
 
   <div class="flex items-center gap-4 mb-6 flex-wrap">
-    <button class="add-row-btn" onclick="addFiisRow()">
-      <i class="fa-solid fa-plus mr-2"></i> Adicionar FII
-    </button>
-    <div class="flex gap-3 text-xs flex-wrap">
-      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full inline-block" style="background:#4ade80"></span> Oportunidade (&ge;15%)</span>
-      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full inline-block" style="background:#fb923c"></span> Próximo do teto (0–14%)</span>
-      <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full inline-block" style="background:#f87171"></span> Acima do teto (caro)</span>
+    <button class="add-row-btn" onclick="addFiisRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar FII</button>
+    <div class="flex gap-3 flex-wrap" style="font-size:12px;color:var(--text2)">
+      <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
+      <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--orange)"></span> Próximo do teto (0–14%)</span>
+      <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--red)"></span> Acima do teto (caro)</span>
     </div>
   </div>
 </div>
+
 </main>
 
-<!-- Footer -->
-<footer class="text-center py-6 text-xs border-t" style="border-color:rgba(6,182,212,0.1); color:#334155;">
-  <p>Calculadora baseada na metodologia do canal <strong style="color:#06b6d4">A Cara da Riqueza</strong> · Dados via <strong style="color:#06b6d4">Investidor10</strong></p>
-  <p class="mt-1" style="color:#1e293b">Não constitui recomendação de investimento. Use como ferramenta de análise pessoal.</p>
+<footer style="text-align:center;padding:18px;font-size:12px;border-top:1px solid var(--footer-border);color:var(--footer-text);margin-top:16px">
+  <p>Baseado na metodologia do canal <strong style="color:var(--accent)">A Cara da Riqueza</strong> · Dados via <strong style="color:var(--accent)">Investidor10</strong></p>
+  <p style="margin-top:3px;font-size:11px">Não constitui recomendação de investimento.</p>
 </footer>
 
 <script>
-// ===================== DATA =====================
-const acoesInit = [
-  {ticker:'BBAS3',  preco:22.21, lpa:2.39, payout:34.90,  cagr:10, dy:8, tempo:5},
-  {ticker:'EGIE3',  preco:35.05, lpa:2.26, payout:113.86, cagr:10, dy:8, tempo:5},
-  {ticker:'VALE3',  preco:81.10, lpa:3.51, payout:155.83, cagr:10, dy:8, tempo:5},
-  {ticker:'WEGE3',  preco:45.20, lpa:1.50, payout:60.71,  cagr:10, dy:8, tempo:5},
-  {ticker:'RADL3',  preco:21.99, lpa:0.74, payout:56.01,  cagr:10, dy:8, tempo:5},
-  {ticker:'BBSE3',  preco:33.85, lpa:4.64, payout:97.94,  cagr:10, dy:8, tempo:5},
-  {ticker:'TAEE11', preco:42.54, lpa:4.58, payout:70.42,  cagr:10, dy:8, tempo:5},
-  {ticker:'KLBN3',  preco:3.51,  lpa:0.26, payout:74.08,  cagr:10, dy:8, tempo:5},
-  {ticker:'LEVE3',  preco:34.09, lpa:4.49, payout:60.27,  cagr:10, dy:8, tempo:5},
-  {ticker:'PETR4',  preco:48.95, lpa:8.55, payout:38.56,  cagr:10, dy:8, tempo:5},
-  {ticker:'ITSA3',  preco:13.87, lpa:1.47, payout:75.66,  cagr:10, dy:8, tempo:5},
-  {ticker:'PSSA3',  preco:50.06, lpa:5.23, payout:7.60,   cagr:10, dy:8, tempo:5},
-];
+// ========================= DEFAULTS =========================
+const DEFAULTS = {
+  acoes: [
+    {ticker:'BBAS3',  preco:22.21, lpa:2.39, payout:34.90,  cagr:10, dy:8, tempo:5},
+    {ticker:'EGIE3',  preco:35.05, lpa:2.26, payout:113.86, cagr:10, dy:8, tempo:5},
+    {ticker:'VALE3',  preco:81.10, lpa:3.51, payout:155.83, cagr:10, dy:8, tempo:5},
+    {ticker:'WEGE3',  preco:45.20, lpa:1.50, payout:60.71,  cagr:10, dy:8, tempo:5},
+    {ticker:'RADL3',  preco:21.99, lpa:0.74, payout:56.01,  cagr:10, dy:8, tempo:5},
+    {ticker:'BBSE3',  preco:33.85, lpa:4.64, payout:97.94,  cagr:10, dy:8, tempo:5},
+    {ticker:'TAEE11', preco:42.54, lpa:4.58, payout:70.42,  cagr:10, dy:8, tempo:5},
+    {ticker:'KLBN3',  preco:3.51,  lpa:0.26, payout:74.08,  cagr:10, dy:8, tempo:5},
+    {ticker:'LEVE3',  preco:34.09, lpa:4.49, payout:60.27,  cagr:10, dy:8, tempo:5},
+    {ticker:'PETR4',  preco:48.95, lpa:8.55, payout:38.56,  cagr:10, dy:8, tempo:5},
+    {ticker:'ITSA3',  preco:13.87, lpa:1.47, payout:75.66,  cagr:10, dy:8, tempo:5},
+    {ticker:'PSSA3',  preco:50.06, lpa:5.23, payout:7.60,   cagr:10, dy:8, tempo:5},
+  ],
+  fiis: [
+    {ticker:'MXRF11', pvp:1.06, preco:9.93,   div12m:1.30,  ipca:5.0, ipcaMais:7, premio:1},
+    {ticker:'VGHF11', pvp:0.79, preco:6.83,   div12m:0.96,  ipca:2.5, ipcaMais:7, premio:3},
+    {ticker:'XPCA11', pvp:0.86, preco:8.25,   div12m:1.31,  ipca:2.5, ipcaMais:7, premio:3},
+    {ticker:'BRCO11', pvp:1.02, preco:118.51, div12m:10.76, ipca:0.0, ipcaMais:7, premio:3},
+    {ticker:'BTCI11', pvp:0.94, preco:9.46,   div12m:1.16,  ipca:5.0, ipcaMais:7, premio:2},
+    {ticker:'XPML11', pvp:1.01, preco:111.25, div12m:11.04, ipca:0.0, ipcaMais:7, premio:2},
+    {ticker:'VISC11', pvp:0.94, preco:110.35, div12m:10.65, ipca:0.0, ipcaMais:7, premio:3},
+    {ticker:'GARE11', pvp:0.89, preco:8.42,   div12m:0.99,  ipca:0.0, ipcaMais:7, premio:3},
+    {ticker:'KNCR11', pvp:1.04, preco:106.53, div12m:15.79, ipca:5.0, ipcaMais:7, premio:1},
+    {ticker:'HGLG11', pvp:0.94, preco:156.60, div12m:14.31, ipca:0.0, ipcaMais:7, premio:3},
+  ]
+};
 
-const fiisInit = [
-  {ticker:'MXRF11', pvp:1.06, preco:9.93,    div12m:1.30,  ipca:5.0, ipcaMais:7, premio:1},
-  {ticker:'VGHF11', pvp:0.79, preco:6.83,    div12m:0.96,  ipca:2.5, ipcaMais:7, premio:3},
-  {ticker:'XPCA11', pvp:0.86, preco:8.25,    div12m:1.31,  ipca:2.5, ipcaMais:7, premio:3},
-  {ticker:'BRCO11', pvp:1.02, preco:118.51,  div12m:10.76, ipca:0.0, ipcaMais:7, premio:3},
-  {ticker:'BTCI11', pvp:0.94, preco:9.46,    div12m:1.16,  ipca:5.0, ipcaMais:7, premio:2},
-  {ticker:'XPML11', pvp:1.01, preco:111.25,  div12m:11.04, ipca:0.0, ipcaMais:7, premio:2},
-  {ticker:'VISC11', pvp:0.94, preco:110.35,  div12m:10.65, ipca:0.0, ipcaMais:7, premio:3},
-  {ticker:'GARE11', pvp:0.89, preco:8.42,    div12m:0.99,  ipca:0.0, ipcaMais:7, premio:3},
-  {ticker:'KNCR11', pvp:1.04, preco:106.53,  div12m:15.79, ipca:5.0, ipcaMais:7, premio:1},
-  {ticker:'HGLG11', pvp:0.94, preco:156.60,  div12m:14.31, ipca:0.0, ipcaMais:7, premio:3},
-];
+// ========================= JSONBIN CONFIG =========================
+const JB_BIN_ID  = '69fb3f0736566621a8309e16';
+const JB_API_KEY = '$2a$10$k4/ONwopA2v/Zg7xxhdG2.GuKxho4qTJrlCNVGFriVsPaq5UTLs82';
+const JB_URL     = `https://api.jsonbin.io/v3/b/${JB_BIN_ID}`;
+const LS_KEY     = 'precoteto_v2';
+const LS_THEME   = 'precoteto_theme';
 
-// ===================== UTILS =====================
-const fmt    = (v, d=2)  => v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
-const fmtPct = v          => v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
-const fmtR   = v          => 'R$ ' + fmt(v);
+// Cabeçalhos padrão — Access Key (Read + Update apenas)
+const jbHeaders = {
+  'Content-Type': 'application/json',
+  'X-Access-Key':  JB_API_KEY,
+  'X-Bin-Versioning': 'false'
+};
 
-function getMarginClass(m) {
-  if (m >= 15) return 'margin-good';
-  if (m >= 0)  return 'margin-warn';
-  return 'margin-bad';
+// ========================= CLOUD STATUS UI =========================
+function setCloudStatus(state, text) {
+  // state: 'loading' | 'ok' | 'error' | 'saving'
+  const icon  = document.querySelector('#cloud-status i');
+  const label = document.getElementById('cloud-label');
+  const colors = { loading:'var(--text3)', ok:'var(--green)', error:'var(--red)', saving:'var(--accent)' };
+  const icons  = { loading:'fa-solid fa-circle-notch fa-spin', ok:'fa-solid fa-cloud-arrow-up', error:'fa-solid fa-cloud-exclamation', saving:'fa-solid fa-circle-notch fa-spin' };
+  icon.className  = icons[state]  + ' ' ;
+  icon.style.color = colors[state];
+  label.textContent = text;
+  label.style.color = colors[state];
 }
-function getMarginIcon(m) {
-  if (m >= 15) return '<i class="fa-solid fa-arrow-trend-up mr-1"></i>';
-  if (m >= 0)  return '<i class="fa-solid fa-circle-dot mr-1"></i>';
-  return '<i class="fa-solid fa-arrow-trend-down mr-1"></i>';
-}
-function getMarginSign(m) {
-  return m >= 0 ? '+' : '';
-}
 
-// ===================== GLOBAL TOOLTIP =====================
-(function() {
-  const tip = document.getElementById('g-tip');
-  let hideTimer;
+// ========================= LOAD FROM CLOUD =========================
+async function loadFromCloud() {
+  setCloudStatus('loading', 'Carregando...');
+  try {
+    const res = await fetch(JB_URL + '/latest', {
+      headers: {
+        'X-Access-Key': JB_API_KEY,
+        'X-Bin-Meta':   'false'
+      }
+    });
 
-  function showTip(el) {
-    clearTimeout(hideTimer);
-    const html = el.getAttribute('data-tip');
-    if (!html) return;
-    tip.innerHTML = html;
-    tip.classList.add('visible');
-    tip.classList.remove('flip-down');
-
-    const r  = el.getBoundingClientRect();
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const tw = 250;
-    const th = tip.offsetHeight || 120;
-    const gap = 8;
-
-    // Prefer above
-    let top = r.top - th - gap;
-    let flip = false;
-    if (top < 8) {
-      top = r.bottom + gap;
-      flip = true;
+    // Bin vazio ou não inicializado → usa defaults silenciosamente
+    if (res.status === 404 || res.status === 400) {
+      setCloudStatus('ok', 'Nenhum dado salvo ainda');
+      loadDataIntoTables(DEFAULTS);
+      return;
     }
-    tip.classList.toggle('flip-down', flip);
 
-    let left = r.left + r.width/2 - 20;
-    if (left + tw > vw - 8) left = vw - tw - 8;
-    if (left < 8)           left = 8;
+    if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    tip.style.top  = top  + 'px';
-    tip.style.left = left + 'px';
-  }
+    // Com X-Bin-Meta:false o JSONBin retorna o record direto, sem wrapper
+    const data = await res.json();
 
-  function hideTip() {
-    hideTimer = setTimeout(() => tip.classList.remove('visible'), 120);
-  }
-
-  document.addEventListener('mouseover', e => {
-    const el = e.target.closest('[data-tip]');
-    if (el) showTip(el);
-  });
-  document.addEventListener('mouseout', e => {
-    const el = e.target.closest('[data-tip]');
-    if (el) hideTip();
-  });
-  // Touch support
-  document.addEventListener('click', e => {
-    const el = e.target.closest('[data-tip]');
-    if (el) {
-      if (tip.classList.contains('visible')) { tip.classList.remove('visible'); }
-      else { showTip(el); }
-    } else {
-      tip.classList.remove('visible');
+    if (data && data.acoes && data.fiis && data.acoes.length > 0) {
+      // Valida se é estrutura da calculadora (precisa ter campo preco ou lpa ou div12m)
+      const primeiraAcao = data.acoes[0];
+      const isCalculadora = primeiraAcao && (
+        'lpa' in primeiraAcao || 'payout' in primeiraAcao || 'dy' in primeiraAcao
+      );
+      if (isCalculadora) {
+        loadDataIntoTables(data);
+        updateSaveTime(data.savedAt);
+        setCloudStatus('ok', 'Sincronizado');
+        try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+        return;
+      }
     }
-  });
-})();
-
-// ===================== AÇÕES =====================
-let acoesRowId = 0;
-
-function calcAcoes(preco, lpa, payout, cagr, dy, tempo) {
-  if (!preco || !lpa || !payout || !cagr || !dy || !tempo) return null;
-  const lpaFut = lpa * Math.pow(1 + cagr/100, tempo);
-  const divFut = lpaFut * (payout/100);
-  const teto   = divFut / (dy/100);
-  const margem = (teto - preco) / preco * 100;
-  return {lpaFut, divFut, teto, margem};
+    // Bin vazio ou estrutura incompatível → usa defaults
+    setCloudStatus('ok', 'Nenhum dado salvo ainda');
+    loadDataIntoTables(DEFAULTS);
+  } catch(e) {
+    console.warn('JSONBin load failed:', e);
+    // Fallback: localStorage cache
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (cached && cached.acoes && cached.fiis) {
+          loadDataIntoTables(cached);
+          updateSaveTime(cached.savedAt);
+          setCloudStatus('error', 'Sem conexão — usando cache');
+          return;
+        }
+      }
+    } catch(e2) {}
+    // Último fallback: defaults
+    loadDataIntoTables(DEFAULTS);
+    setCloudStatus('error', 'Sem conexão');
+  }
 }
 
-function updateAcoesRow(rid) {
-  const row = document.getElementById('acoes-row-' + rid);
-  if (!row) return;
-  const preco  = parseFloat(row.querySelector('[data-f="preco"]').value)  || 0;
-  const lpa    = parseFloat(row.querySelector('[data-f="lpa"]').value)    || 0;
-  const payout = parseFloat(row.querySelector('[data-f="payout"]').value) || 0;
-  const cagr   = parseFloat(row.querySelector('[data-f="cagr"]').value)   || 0;
-  const dy     = parseFloat(row.querySelector('[data-f="dy"]').value)     || 0;
-  const tempo  = parseInt(  row.querySelector('[data-f="tempo"]').value)  || 0;
+// ========================= SAVE TO CLOUD =========================
+async function saveData() {
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Salvando...';
+  setCloudStatus('saving', 'Salvando...');
 
-  const res = calcAcoes(preco, lpa, payout, cagr, dy, tempo);
-  const lpaFutEl = row.querySelector('[data-r="lpaFut"]');
-  const divFutEl = row.querySelector('[data-r="divFut"]');
-  const tetoEl   = row.querySelector('[data-r="teto"]');
-  const margemEl = row.querySelector('[data-r="margem"]');
-  const tickerEl = row.querySelector('[data-r="ticker-opp"]');
+  const data = collectCurrentData();
 
-  if (res) {
-    lpaFutEl.textContent = fmtR(res.lpaFut);
-    divFutEl.textContent = fmtR(res.divFut);
-    tetoEl.textContent   = fmtR(res.teto);
-    const mc = getMarginClass(res.margem);
-    margemEl.innerHTML   = `<span class="${mc}">${getMarginIcon(res.margem)}${getMarginSign(res.margem)}${fmtPct(res.margem)}</span>`;
+  try {
+    const res = await fetch(JB_URL, {
+      method:  'PUT',
+      headers: jbHeaders,
+      body:    JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    // Opportunity row highlight
-    if (res.margem >= 15) {
-      row.classList.add('row-opp');
-      if (tickerEl) tickerEl.innerHTML = '<span class="opp-tag"><i class="fa-solid fa-star" style="font-size:7px"></i> EM ALTA</span>';
-    } else {
-      row.classList.remove('row-opp');
-      if (tickerEl) tickerEl.innerHTML = '';
-    }
-  } else {
-    [lpaFutEl, divFutEl, tetoEl, margemEl].forEach(el => el.innerHTML = '<span class="text-gray-600">—</span>');
-    row.classList.remove('row-opp');
-    if (tickerEl) tickerEl.innerHTML = '';
+    // Cache local
+    try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+
+    btn.classList.add('saved');
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Salvo!';
+    setTimeout(() => {
+      btn.classList.remove('saved');
+      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar na nuvem';
+      btn.disabled = false;
+    }, 2000);
+    updateSaveTime(data.savedAt);
+    setCloudStatus('ok', 'Sincronizado');
+    showToast('Dados salvos na nuvem!', false);
+  } catch(e) {
+    console.error('JSONBin save failed:', e);
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar na nuvem';
+    btn.disabled = false;
+    setCloudStatus('error', 'Erro ao salvar');
+    showToast('Erro ao salvar na nuvem. Verifique a conexão.', true);
   }
+}
+
+// ========================= EXPORT (backup local) =========================
+function exportData() {
+  const data = collectCurrentData();
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const date = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+  a.href     = url;
+  a.download = 'preco-teto-' + date + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup exportado!', false);
+}
+
+// ========================= LOAD INTO TABLES =========================
+function loadDataIntoTables(data) {
+  document.getElementById('acoes-tbody').innerHTML = '';
+  document.getElementById('fiis-tbody').innerHTML  = '';
+  acoesRowId = 0; fiisRowId = 0;
+  (data.acoes || []).forEach(d => addAcoesRow(d));
+  (data.fiis  || []).forEach(d => addFiisRow(d));
   updateAcoesStats();
-}
-
-function addAcoesRow(data) {
-  const d = data || {ticker:'', preco:'', lpa:'', payout:'', cagr:10, dy:8, tempo:5};
-  const rid = ++acoesRowId;
-  const tbody = document.getElementById('acoes-tbody');
-  const tr = document.createElement('tr');
-  tr.id = 'acoes-row-' + rid;
-  tr.innerHTML = `
-    <td>
-      <div style="display:flex;align-items:center;gap:2px">
-        <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK3"
-               style="width:78px" oninput="updateAcoesRow(${rid})">
-        <span data-r="ticker-opp"></span>
-      </div>
-    </td>
-    <td><input class="table-input" data-f="preco"  type="number" step="0.01" value="${d.preco}"  placeholder="0,00" oninput="updateAcoesRow(${rid})"></td>
-    <td><input class="table-input" data-f="lpa"    type="number" step="0.01" value="${d.lpa}"    placeholder="0,00" oninput="updateAcoesRow(${rid})"></td>
-    <td><input class="table-input" data-f="payout" type="number" step="0.1"  value="${d.payout}" placeholder="%"    oninput="updateAcoesRow(${rid})"></td>
-    <td><input class="table-input" data-f="cagr"   type="number" step="0.5"  value="${d.cagr}"   placeholder="%"    oninput="updateAcoesRow(${rid})"></td>
-    <td><input class="table-input" data-f="dy"     type="number" step="0.5"  value="${d.dy}"     placeholder="%"    oninput="updateAcoesRow(${rid})"></td>
-    <td><input class="table-input" data-f="tempo"  type="number" step="1" min="1" max="20" value="${d.tempo}" placeholder="5" oninput="updateAcoesRow(${rid})" style="width:55px"></td>
-    <td><span data-r="lpaFut" class="result-cell result-neutral">—</span></td>
-    <td><span data-r="divFut" class="result-cell result-neutral">—</span></td>
-    <td><span data-r="teto"   class="result-cell preco-teto-cell">—</span></td>
-    <td><span data-r="margem" class="result-cell result-neutral">—</span></td>
-    <td><span class="del-btn" onclick="deleteRow('acoes-row-${rid}', updateAcoesStats)"><i class="fa-solid fa-xmark"></i></span></td>
-  `;
-  tbody.appendChild(tr);
-  if (d.preco && d.lpa) updateAcoesRow(rid);
-}
-
-function updateAcoesStats() {
-  const rows = document.querySelectorAll('#acoes-tbody tr');
-  let total=0, oport=0, caro=0, neutro=0;
-  rows.forEach(r => {
-    total++;
-    const span = r.querySelector('[data-r="margem"] span');
-    if (!span) return;
-    const cls = span.className;
-    if (cls.includes('margin-good'))     oport++;
-    else if (cls.includes('margin-bad')) caro++;
-    else neutro++;
-  });
-  document.getElementById('acoes-stats').innerHTML = `
-    <div class="stat-card"><div class="text-2xl font-bold text-accent">${total}</div><div class="text-xs text-gray-500 mt-1">Total de Ações</div></div>
-    <div class="stat-card"><div class="text-2xl font-bold text-green-400">${oport}</div><div class="text-xs text-gray-500 mt-1">Em Oportunidade</div></div>
-    <div class="stat-card"><div class="text-2xl font-bold text-orange-400">${neutro}</div><div class="text-xs text-gray-500 mt-1">Próximo do Teto</div></div>
-    <div class="stat-card"><div class="text-2xl font-bold text-red-400">${caro}</div><div class="text-xs text-gray-500 mt-1">Acima do Teto</div></div>
-  `;
-}
-
-// ===================== FIIs =====================
-let fiisRowId = 0;
-
-function calcFiis(preco, div12m, ipca, ipcaMais, premio) {
-  if (!preco || !div12m || !(ipca >= 0) || !ipcaMais || !premio) return null;
-  const dyTotal = (ipca + ipcaMais + premio) / 100;
-  if (dyTotal <= 0) return null;
-  const teto   = div12m / dyTotal;
-  const margem = (teto - preco) / preco * 100;
-  return {dyTotal: dyTotal * 100, teto, margem};
-}
-
-function updateFiisRow(rid) {
-  const row = document.getElementById('fiis-row-' + rid);
-  if (!row) return;
-  const preco    = parseFloat(row.querySelector('[data-f="preco"]').value)    || 0;
-  const div12m   = parseFloat(row.querySelector('[data-f="div12m"]').value)   || 0;
-  const ipca     = parseFloat(row.querySelector('[data-f="ipca"]').value);
-  const ipcaMais = parseFloat(row.querySelector('[data-f="ipcaMais"]').value) || 0;
-  const premio   = parseFloat(row.querySelector('[data-f="premio"]').value)   || 0;
-
-  const res = calcFiis(preco, div12m, isNaN(ipca) ? 0 : ipca, ipcaMais, premio);
-  const dyTotalEl = row.querySelector('[data-r="dyTotal"]');
-  const tetoEl    = row.querySelector('[data-r="teto"]');
-  const margemEl  = row.querySelector('[data-r="margem"]');
-  const tickerEl  = row.querySelector('[data-r="ticker-opp"]');
-
-  if (res) {
-    dyTotalEl.textContent = fmtPct(res.dyTotal);
-    tetoEl.textContent    = fmtR(res.teto);
-    const mc = getMarginClass(res.margem);
-    margemEl.innerHTML    = `<span class="${mc}">${getMarginIcon(res.margem)}${getMarginSign(res.margem)}${fmtPct(res.margem)}</span>`;
-
-    // Opportunity row highlight
-    if (res.margem >= 15) {
-      row.classList.add('row-opp');
-      if (tickerEl) tickerEl.innerHTML = '<span class="opp-tag"><i class="fa-solid fa-star" style="font-size:7px"></i> EM ALTA</span>';
-    } else {
-      row.classList.remove('row-opp');
-      if (tickerEl) tickerEl.innerHTML = '';
-    }
-  } else {
-    [dyTotalEl, tetoEl, margemEl].forEach(el => el.innerHTML = '<span class="text-gray-600">—</span>');
-    row.classList.remove('row-opp');
-    if (tickerEl) tickerEl.innerHTML = '';
-  }
   updateFiisStats();
 }
 
-function addFiisRow(data) {
-  const d = data || {ticker:'', pvp:'', preco:'', div12m:'', ipca:0, ipcaMais:7, premio:3};
-  const rid = ++fiisRowId;
-  const tbody = document.getElementById('fiis-tbody');
-  const tr = document.createElement('tr');
-  tr.id = 'fiis-row-' + rid;
-  tr.innerHTML = `
-    <td>
-      <div style="display:flex;align-items:center;gap:2px">
-        <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11"
-               style="width:82px" oninput="updateFiisRow(${rid})">
-        <span data-r="ticker-opp"></span>
-      </div>
-    </td>
-    <td><input class="table-input" data-f="pvp"      type="number" step="0.01" value="${d.pvp}"      placeholder="1,00" oninput="updateFiisRow(${rid})" style="width:62px"></td>
-    <td><input class="table-input" data-f="preco"    type="number" step="0.01" value="${d.preco}"    placeholder="0,00" oninput="updateFiisRow(${rid})"></td>
-    <td><input class="table-input" data-f="div12m"   type="number" step="0.01" value="${d.div12m}"   placeholder="0,00" oninput="updateFiisRow(${rid})"></td>
-    <td><input class="table-input" data-f="ipca"     type="number" step="0.5"  value="${d.ipca}"     placeholder="%" oninput="updateFiisRow(${rid})" style="width:62px"></td>
-    <td><input class="table-input" data-f="ipcaMais" type="number" step="0.5"  value="${d.ipcaMais}" placeholder="%" oninput="updateFiisRow(${rid})" style="width:62px"></td>
-    <td><input class="table-input" data-f="premio"   type="number" step="0.5"  value="${d.premio}"   placeholder="%" oninput="updateFiisRow(${rid})" style="width:62px"></td>
-    <td><span data-r="dyTotal" class="result-cell" style="color:#94a3b8;font-size:12px">—</span></td>
-    <td><span data-r="teto"    class="result-cell preco-teto-cell">—</span></td>
-    <td><span data-r="margem"  class="result-cell result-neutral">—</span></td>
-    <td><span class="del-btn" onclick="deleteRow('fiis-row-${rid}', updateFiisStats)"><i class="fa-solid fa-xmark"></i></span></td>
-  `;
+// ========================= SAVE TIME =========================
+function updateSaveTime(iso) {
+  if (!iso) return;
+  const d = new Date(iso);
+  document.getElementById('save-time').textContent =
+    'Salvo: ' + d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+}
+
+// ========================= TOAST =========================
+function showToast(msg, warn) {
+  const t = document.getElementById('toast');
+  const ic = document.getElementById('toast-icon');
+  document.getElementById('toast-msg').textContent = msg;
+  ic.className = 'toast-icon ' + (warn ? 'warn fa-solid fa-triangle-exclamation' : 'fa-solid fa-floppy-disk');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ========================= COLLECT CURRENT DATA =========================
+function collectCurrentData() {
+  const acoes = [];
+  document.querySelectorAll('#acoes-tbody tr').forEach(row => {
+    acoes.push({
+      ticker: row.querySelector('[data-f="ticker"]').value || '',
+      preco:  pf(row.querySelector('[data-f="preco"]').value),
+      lpa:    pf(row.querySelector('[data-f="lpa"]').value),
+      payout: pf(row.querySelector('[data-f="payout"]').value),
+      cagr:   pf(row.querySelector('[data-f="cagr"]').value)   || 10,
+      dy:     pf(row.querySelector('[data-f="dy"]').value)     || 8,
+      tempo:  pi(row.querySelector('[data-f="tempo"]').value)  || 5,
+    });
+  });
+  const fiis = [];
+  document.querySelectorAll('#fiis-tbody tr').forEach(row => {
+    fiis.push({
+      ticker:   row.querySelector('[data-f="ticker"]').value || '',
+      pvp:      pf(row.querySelector('[data-f="pvp"]').value),
+      preco:    pf(row.querySelector('[data-f="preco"]').value),
+      div12m:   pf(row.querySelector('[data-f="div12m"]').value),
+      ipca:     pf(row.querySelector('[data-f="ipca"]').value),
+      ipcaMais: pf(row.querySelector('[data-f="ipcaMais"]').value) || 7,
+      premio:   pf(row.querySelector('[data-f="premio"]').value)   || 3,
+    });
+  });
+  return { acoes, fiis, savedAt: new Date().toISOString() };
+}
+
+// ========================= THEME =========================
+let currentTheme = localStorage.getItem(LS_THEME) || 'dark';
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme-icon').className  = t === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  document.getElementById('theme-label').textContent = t === 'dark' ? 'Escuro' : 'Claro';
+}
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(LS_THEME, currentTheme);
+  applyTheme(currentTheme);
+}
+
+// ========================= UTILS =========================
+const fmt    = (v, d=2) => v.toLocaleString('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d});
+const fmtPct = v => v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '%';
+const fmtR   = v => 'R$ ' + fmt(v);
+
+function getMarginClass(m) { return m >= 15 ? 'margin-good' : m >= 0 ? 'margin-warn' : 'margin-bad'; }
+function getMarginIcon(m)  { return ''; }
+function getMarginSign(m)  { return m >= 0 ? '+' : ''; }
+
+// ========================= TOOLTIP =========================
+(function() {
+  const tip = document.getElementById('g-tip');
+  let hideTimer;
+  function showTip(el) {
+    clearTimeout(hideTimer);
+    const html = el.getAttribute('data-tip'); if (!html) return;
+    tip.innerHTML = html; tip.classList.add('visible'); tip.classList.remove('flip-down');
+    const r=el.getBoundingClientRect(), vw=window.innerWidth, th=tip.offsetHeight||100, gap=8;
+    let top=r.top-th-gap, flip=false;
+    if (top<8) { top=r.bottom+gap; flip=true; }
+    tip.classList.toggle('flip-down', flip);
+    let left=r.left+r.width/2-20;
+    if (left+250>vw-8) left=vw-258; if (left<8) left=8;
+    tip.style.top=top+'px'; tip.style.left=left+'px';
+  }
+  function hideTip() { hideTimer=setTimeout(()=>tip.classList.remove('visible'), 120); }
+  document.addEventListener('mouseover', e=>{ const el=e.target.closest('[data-tip]'); if(el) showTip(el); });
+  document.addEventListener('mouseout',  e=>{ const el=e.target.closest('[data-tip]'); if(el) hideTip(); });
+  document.addEventListener('click', e=>{ const el=e.target.closest('[data-tip]'); if(el){ tip.classList.contains('visible')?tip.classList.remove('visible'):showTip(el); } else tip.classList.remove('visible'); });
+})();
+
+// ========================= INPUT HELPERS =========================
+// Campos numéricos usam type="text" para preservar zeros decimais (8,10 ≠ 8,1)
+// Aceita vírgula ou ponto como separador decimal
+function pf(v) { return parseFloat(String(v).replace(',','.')) || 0; }
+function pi(v) { return parseInt(String(v)) || 0; }
+
+// Valida: só dígitos, vírgula ou ponto (máx 1 separador)
+function numericInput(el) {
+  let v = el.value.replace(/[^0-9.,]/g,'');
+  const parts = v.split(/[.,]/);
+  if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+  el.value = v;
+}
+
+// Formata valor para exibição no input preservando decimais digitados
+function fmtInput(v) {
+  if (v === '' || v === null || v === undefined) return '';
+  const n = parseFloat(v);
+  if (isNaN(n)) return '';
+  // Preserva casas decimais do valor original
+  const s = String(v);
+  const dot = s.indexOf('.');
+  if (dot === -1) return s;
+  return s; // mantém exatamente como está no dado
+}
+
+// ========================= SORTING =========================
+function sortTableByMargem(tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  const rows  = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const getMargem = r => {
+      const sp = r.querySelector('[data-r="margem"] span');
+      if (!sp) return -Infinity;
+      const txt = sp.textContent.replace('%','').replace(',','.').replace('+','').trim();
+      const n = parseFloat(txt);
+      return isNaN(n) ? -Infinity : n;
+    };
+    return getMargem(b) - getMargem(a); // maior margem primeiro
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ========================= AÇÕES =========================
+let acoesRowId = 0;
+
+function calcAcoes(preco,lpa,payout,cagr,dy,tempo) {
+  if (!preco||!lpa||!payout||!cagr||!dy||!tempo) return null;
+  const lpaFut=lpa*Math.pow(1+cagr/100,tempo), divFut=lpaFut*(payout/100), teto=divFut/(dy/100), margem=(teto-preco)/preco*100;
+  return {lpaFut,divFut,teto,margem};
+}
+
+function updateAcoesRow(rid) {
+  const row=document.getElementById('acoes-row-'+rid); if(!row) return;
+  const preco =pf(row.querySelector('[data-f="preco"]').value);
+  const lpa   =pf(row.querySelector('[data-f="lpa"]').value);
+  const payout=pf(row.querySelector('[data-f="payout"]').value);
+  const cagr  =pf(row.querySelector('[data-f="cagr"]').value);
+  const dy    =pf(row.querySelector('[data-f="dy"]').value);
+  const tempo =pi(row.querySelector('[data-f="tempo"]').value);
+  const res=calcAcoes(preco,lpa,payout,cagr,dy,tempo);
+  const lpaFutEl=row.querySelector('[data-r="lpaFut"]');
+  const divFutEl=row.querySelector('[data-r="divFut"]');
+  const tetoEl  =row.querySelector('[data-r="teto"]');
+  const margemEl=row.querySelector('[data-r="margem"]');
+  const starEl  =row.querySelector('[data-r="star"]');
+  if (res) {
+    lpaFutEl.textContent=fmtR(res.lpaFut);
+    divFutEl.textContent=fmtR(res.divFut);
+    tetoEl.textContent  =fmtR(res.teto);
+    margemEl.innerHTML  =`<span class="result-cell ${getMarginClass(res.margem)}">${getMarginSign(res.margem)}${fmtPct(res.margem)}</span>`;
+    if (res.margem>=15) { row.classList.add('row-opp'); if(starEl) starEl.innerHTML='<span class="opp-star"><i class="fa-solid fa-star"></i></span>'; }
+    else { row.classList.remove('row-opp'); if(starEl) starEl.innerHTML=''; }
+  } else {
+    [lpaFutEl,divFutEl,tetoEl,margemEl].forEach(el=>el.innerHTML=`<span style="color:var(--text3)">—</span>`);
+    row.classList.remove('row-opp'); if(starEl) starEl.innerHTML='';
+  }
+  updateAcoesStats();
+  sortTableByMargem('acoes-tbody');
+}
+
+function addAcoesRow(data) {
+  const d=data||{ticker:'',preco:'',lpa:'',payout:'',cagr:10,dy:8,tempo:5};
+  const rid=++acoesRowId;
+  const tbody=document.getElementById('acoes-tbody');
+  const tr=document.createElement('tr'); tr.id='acoes-row-'+rid;
+  const vPreco=fmtInput(d.preco), vLpa=fmtInput(d.lpa), vPayout=fmtInput(d.payout);
+  const vCagr=fmtInput(d.cagr), vDy=fmtInput(d.dy), vTempo=d.tempo||'';
+  tr.innerHTML=`
+    <td><div style="display:flex;align-items:center;gap:4px">
+      <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK3" style="width:80px" oninput="updateAcoesRow(${rid})">
+      <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
+    </div></td>
+    <td><input class="table-input" data-f="preco"  inputmode="decimal" value="${vPreco}"  placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:88px"></td>
+    <td><input class="table-input" data-f="lpa"    inputmode="decimal" value="${vLpa}"    placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
+    <td><input class="table-input" data-f="payout" inputmode="decimal" value="${vPayout}" placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
+    <td><input class="table-input" data-f="cagr"   inputmode="decimal" value="${vCagr}"   placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="dy"     inputmode="decimal" value="${vDy}"     placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="tempo"  inputmode="numeric" value="${vTempo}"  placeholder="5" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:52px"></td>
+    <td style="text-align:center"><span data-r="lpaFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
+    <td style="text-align:center"><span data-r="divFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
+    <td style="text-align:center"><span data-r="teto"   class="result-cell preco-teto-cell">—</span></td>
+    <td style="text-align:center"><span data-r="margem" class="result-cell result-neutral">—</span></td>
+    <td><span class="del-btn" onclick="deleteRow('acoes-row-${rid}',updateAcoesStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
   tbody.appendChild(tr);
-  if (d.preco && d.div12m) updateFiisRow(rid);
+  if (d.preco&&d.lpa) updateAcoesRow(rid);
+}
+
+function updateAcoesStats() {
+  const rows=document.querySelectorAll('#acoes-tbody tr');
+  let total=0,oport=0,caro=0,neutro=0;
+  rows.forEach(r=>{ total++; const sp=r.querySelector('[data-r="margem"] span'); if(!sp) return; const c=sp.className; if(c.includes('margin-good')) oport++; else if(c.includes('margin-bad')) caro++; else neutro++; });
+  document.getElementById('acoes-stats').innerHTML=`
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--accent)">${total}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Total de Ações</div></div>
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--green)">${oport}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Em Oportunidade</div></div>
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--orange)">${neutro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Próximo do Teto</div></div>
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--red)">${caro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Acima do Teto</div></div>`;
+}
+
+// ========================= FIIs =========================
+let fiisRowId = 0;
+
+function calcFiis(preco,div12m,ipca,ipcaMais,premio) {
+  if (!preco||!div12m||!(ipca>=0)||!ipcaMais||!premio) return null;
+  const dyTotal=(ipca+ipcaMais+premio)/100; if(dyTotal<=0) return null;
+  const teto=div12m/dyTotal, margem=(teto-preco)/preco*100;
+  return {dyTotal:dyTotal*100,teto,margem};
+}
+
+function updateFiisRow(rid) {
+  const row=document.getElementById('fiis-row-'+rid); if(!row) return;
+  const preco   =pf(row.querySelector('[data-f="preco"]').value);
+  const div12m  =pf(row.querySelector('[data-f="div12m"]').value);
+  const ipcaRaw =row.querySelector('[data-f="ipca"]').value;
+  const ipca    =pf(ipcaRaw);
+  const ipcaMais=pf(row.querySelector('[data-f="ipcaMais"]').value);
+  const premio  =pf(row.querySelector('[data-f="premio"]').value);
+  const res=calcFiis(preco,div12m,ipcaRaw===''?0:ipca,ipcaMais,premio);
+  const dyTotalEl=row.querySelector('[data-r="dyTotal"]');
+  const tetoEl   =row.querySelector('[data-r="teto"]');
+  const margemEl =row.querySelector('[data-r="margem"]');
+  const starEl   =row.querySelector('[data-r="star"]');
+  if (res) {
+    dyTotalEl.textContent=fmtPct(res.dyTotal);
+    tetoEl.textContent   =fmtR(res.teto);
+    margemEl.innerHTML   =`<span class="result-cell ${getMarginClass(res.margem)}">${getMarginSign(res.margem)}${fmtPct(res.margem)}</span>`;
+    if (res.margem>=15) { row.classList.add('row-opp'); if(starEl) starEl.innerHTML='<span class="opp-star"><i class="fa-solid fa-star"></i></span>'; }
+    else { row.classList.remove('row-opp'); if(starEl) starEl.innerHTML=''; }
+  } else {
+    [dyTotalEl,tetoEl,margemEl].forEach(el=>el.innerHTML=`<span style="color:var(--text3)">—</span>`);
+    row.classList.remove('row-opp'); if(starEl) starEl.innerHTML='';
+  }
+  updateFiisStats();
+  sortTableByMargem('fiis-tbody');
+}
+
+function addFiisRow(data) {
+  const d=data||{ticker:'',pvp:'',preco:'',div12m:'',ipca:0,ipcaMais:7,premio:3};
+  const rid=++fiisRowId;
+  const tbody=document.getElementById('fiis-tbody');
+  const tr=document.createElement('tr'); tr.id='fiis-row-'+rid;
+  const vPvp=fmtInput(d.pvp), vPreco=fmtInput(d.preco), vDiv=fmtInput(d.div12m);
+  const vIpca=fmtInput(d.ipca), vIpcaMais=fmtInput(d.ipcaMais), vPremio=fmtInput(d.premio);
+  tr.innerHTML=`
+    <td><div style="display:flex;align-items:center;gap:4px">
+      <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:80px" oninput="updateFiisRow(${rid})">
+      <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
+    </div></td>
+    <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
+    <td><input class="table-input" data-f="div12m"   inputmode="decimal" value="${vDiv}"      placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:80px"></td>
+    <td><input class="table-input" data-f="ipca"     inputmode="decimal" value="${vIpca}"     placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
+    <td><input class="table-input" data-f="ipcaMais" inputmode="decimal" value="${vIpcaMais}" placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
+    <td><input class="table-input" data-f="premio"   inputmode="decimal" value="${vPremio}"   placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
+    <td style="text-align:center"><span data-r="dyTotal" class="result-cell result-neutral" style="font-size:12px">—</span></td>
+    <td style="text-align:center"><span data-r="teto"    class="result-cell preco-teto-cell">—</span></td>
+    <td style="text-align:center"><span data-r="margem"  class="result-cell result-neutral">—</span></td>
+    <td><span class="del-btn" onclick="deleteRow('fiis-row-${rid}',updateFiisStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
+  tbody.appendChild(tr);
+  if (d.preco&&d.div12m) updateFiisRow(rid);
 }
 
 function updateFiisStats() {
-  const rows = document.querySelectorAll('#fiis-tbody tr');
-  let total=0, oport=0, caro=0, neutro=0;
-  rows.forEach(r => {
-    total++;
-    const span = r.querySelector('[data-r="margem"] span');
-    if (!span) return;
-    const cls = span.className;
-    if (cls.includes('margin-good'))     oport++;
-    else if (cls.includes('margin-bad')) caro++;
-    else neutro++;
-  });
-  document.getElementById('fiis-stats').innerHTML = `
-    <div class="stat-card"><div class="text-2xl font-bold text-accent">${total}</div><div class="text-xs text-gray-500 mt-1">Total de FIIs</div></div>
-    <div class="stat-card"><div class="text-2xl font-bold text-green-400">${oport}</div><div class="text-xs text-gray-500 mt-1">Em Oportunidade</div></div>
-    <div class="stat-card"><div class="text-2xl font-bold text-orange-400">${neutro}</div><div class="text-xs text-gray-500 mt-1">Próximo do Teto</div></div>
-    <div class="stat-card"><div class="text-2xl font-bold text-red-400">${caro}</div><div class="text-xs text-gray-500 mt-1">Acima do Teto</div></div>
-  `;
+  const rows=document.querySelectorAll('#fiis-tbody tr');
+  let total=0,oport=0,caro=0,neutro=0;
+  rows.forEach(r=>{ total++; const sp=r.querySelector('[data-r="margem"] span'); if(!sp) return; const c=sp.className; if(c.includes('margin-good')) oport++; else if(c.includes('margin-bad')) caro++; else neutro++; });
+  document.getElementById('fiis-stats').innerHTML=`
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--accent)">${total}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Total de FIIs</div></div>
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--green)">${oport}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Em Oportunidade</div></div>
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--orange)">${neutro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Próximo do Teto</div></div>
+    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--red)">${caro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Acima do Teto</div></div>`;
 }
 
-// ===================== SHARED =====================
-function deleteRow(id, callback) {
-  const el = document.getElementById(id);
-  if (el) { el.remove(); if (callback) callback(); }
-}
+// ========================= SHARED =========================
+function deleteRow(id, cb) { const el=document.getElementById(id); if(el){ el.remove(); if(cb) cb(); } }
 
 function switchTab(tab) {
-  const btnAcoes = document.getElementById('tab-btn-acoes');
-  const btnFiis  = document.getElementById('tab-btn-fiis');
-
-  btnAcoes.classList.toggle('active', tab === 'acoes');
-  btnFiis.classList.toggle('active',  tab === 'fiis');
-
-  // Reset inactive tab styling
-  [btnAcoes, btnFiis].forEach(b => {
-    if (!b.classList.contains('active')) {
-      b.style.color      = '#94a3b8';
-      b.style.background = 'rgba(255,255,255,0.03)';
-      b.style.border     = '1px solid rgba(6,182,212,0.12)';
-    } else {
-      b.style.color = b.style.background = b.style.border = '';
-    }
+  ['acoes','fiis'].forEach(t=>{
+    document.getElementById('tab-btn-'+t).classList.toggle('active',t===tab);
+    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
   });
-
-  document.getElementById('tab-acoes').classList.toggle('active', tab === 'acoes');
-  document.getElementById('tab-fiis').classList.toggle('active',  tab === 'fiis');
 }
 
-// ===================== INIT =====================
-acoesInit.forEach(d => addAcoesRow(d));
-fiisInit.forEach(d  => addFiisRow(d));
-updateAcoesStats();
-updateFiisStats();
+// ========================= INIT =========================
+applyTheme(currentTheme);
+// Carrega defaults temporariamente enquanto busca da nuvem
+loadDataIntoTables(DEFAULTS);
+loadFromCloud(); // async — substitui os defaults quando chegar
 </script>
 </body>
 </html>
