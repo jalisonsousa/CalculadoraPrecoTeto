@@ -502,18 +502,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
       <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → ação → preço no topo da página</p></div></div>
       <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">LPA Atual</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">LPA</span></p></div></div>
-      <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">Payout (%)</div>
-        <p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">Payout</span> — use média 3–5 anos</p>
-      </div></div>
-      <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">CAGR (%)</div>
-        <p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Resultados</span> → crescimento do LPA. Fórmula: <code style="color:var(--gold)">(LPA_hoje/LPA_5a)^(1/5)−1</code></p>
-      </div></div>
-      <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">DY Desejado (%)</div>
-        <p style="font-size:12px;color:var(--text2)">Sua meta de rentabilidade. Padrão: <span class="badge">8%</span></p>
-      </div></div>
-      <div class="guide-step flex items-start gap-3"><div class="step-num">6</div><div><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--accent)">Tempo (anos)</div>
-        <p style="font-size:12px;color:var(--text2)">Horizonte de projeção. Padrão: <span class="badge">5 anos</span></p>
-      </div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Payout (%)</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">Payout</span> — use média 3–5 anos</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">CAGR (%)</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Resultados</span> → crescimento do LPA. Fórmula: <code style="color:var(--gold)">(LPA_hoje/LPA_5a)^(1/5)−1</code></p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">DY Desejado (%)</div><p style="font-size:12px;color:var(--text2)">Sua meta de rentabilidade. Padrão: <span class="badge">8%</span></p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">6</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Tempo (anos)</div><p style="font-size:12px;color:var(--text2)">Horizonte de projeção. Padrão: <span class="badge">5 anos</span></p></div></div>
     </div>
   </details>
 
@@ -533,7 +525,12 @@
           <th class="result-col" style="min-width:95px"><span style="color:var(--accent2)">LPA Futuro</span></th>
           <th class="result-col" style="min-width:100px"><span style="color:var(--accent2)">Div. Futuro</span></th>
           <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
-          <th class="result-col" style="min-width:115px"><span style="color:var(--accent2)">Margem Seg.</span></th>
+          <th class="result-col" style="min-width:115px">
+            <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+              <button id="acoes-sort-btn" style="background:transparent;border:0;color:var(--accent2);font-weight:700;cursor:pointer" onclick="sortByMargem('acoes-tbody')" title="Ordenar por Margem Seg.">Margem Seg.</button>
+              <button class="del-btn" style="padding:4px 7px;margin-left:4px" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
+            </div>
+          </th>
           <th style="width:38px"></th>
         </tr>
       </thead>
@@ -624,7 +621,12 @@
           <th style="min-width:68px">Prêmio % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Prêmio de Risco</strong><br>FIIs grandes: 1–2% · Médios: 2–3% · Menores: 3–4%"></i></th>
           <th class="result-col" style="min-width:70px"><span style="color:var(--text2);font-size:10px">DY Total</span></th>
           <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
-          <th class="result-col" style="min-width:115px"><span style="color:var(--accent2)">Margem Seg.</span></th>
+          <th class="result-col" style="min-width:115px">
+            <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+              <button id="fiis-sort-btn" style="background:transparent;border:0;color:var(--accent2);font-weight:700;cursor:pointer" onclick="sortByMargem('fiis-tbody')" title="Ordenar por Margem Seg.">Margem Seg.</button>
+              <button class="del-btn" style="padding:4px 7px;margin-left:4px" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
+            </div>
+          </th>
           <th style="width:38px"></th>
         </tr>
       </thead>
@@ -952,8 +954,13 @@ function fmtInput(v) {
 }
 
 // ========================= SORTING =========================
-function sortTableByMargem(tbodyId) {
+// estado de ordenação por tbodyId: null | 'desc' | 'asc'
+const sortState = { 'acoes-tbody': null, 'fiis-tbody': null };
+
+// ordena diretamente (mantive sua função com retorno -Infinity para vazios)
+function sortTableByMargem(tbodyId, dir = 'desc') {
   const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
   const rows  = Array.from(tbody.querySelectorAll('tr'));
   rows.sort((a, b) => {
     const getMargem = r => {
@@ -963,9 +970,42 @@ function sortTableByMargem(tbodyId) {
       const n = parseFloat(txt);
       return isNaN(n) ? -Infinity : n;
     };
-    return getMargem(b) - getMargem(a); // maior margem primeiro
+    return (dir === 'desc' ? getMargem(b) - getMargem(a) : getMargem(a) - getMargem(b));
   });
   rows.forEach(r => tbody.appendChild(r));
+}
+
+// alterna estado: null -> desc -> asc -> desc ...
+function sortByMargem(tbodyId) {
+  const cur = sortState[tbodyId];
+  const next = cur === 'desc' ? 'asc' : 'desc';
+  sortState[tbodyId] = next;
+  updateSortIndicators(tbodyId, next);
+  sortTableByMargem(tbodyId, next);
+}
+
+// limpa ordenação e restaura ordem de inserção
+function clearSort(tbodyId) {
+  sortState[tbodyId] = null;
+  updateSortIndicators(tbodyId, null);
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const oa = parseInt(a.dataset.order || '0', 10);
+    const ob = parseInt(b.dataset.order || '0', 10);
+    return oa - ob;
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+function updateSortIndicators(tbodyId, state) {
+  const btnId = tbodyId === 'acoes-tbody' ? 'acoes-sort-btn' : 'fiis-sort-btn';
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  if (state === 'desc') btn.textContent = 'Margem Seg. ↓';
+  else if (state === 'asc') btn.textContent = 'Margem Seg. ↑';
+  else btn.textContent = 'Margem Seg.';
 }
 
 // ========================= AÇÕES =========================
@@ -975,6 +1015,34 @@ function calcAcoes(preco,lpa,payout,cagr,dy,tempo) {
   if (!preco||!lpa||!payout||!cagr||!dy||!tempo) return null;
   const lpaFut=lpa*Math.pow(1+cagr/100,tempo), divFut=lpaFut*(payout/100), teto=divFut/(dy/100), margem=(teto-preco)/preco*100;
   return {lpaFut,divFut,teto,margem};
+}
+
+function addAcoesRow(data) {
+  const d=data||{ticker:'',preco:'',lpa:'',payout:'',cagr:10,dy:8,tempo:5};
+  const rid=++acoesRowId;
+  const tbody=document.getElementById('acoes-tbody');
+  const tr=document.createElement('tr'); tr.id='acoes-row-'+rid;
+  tr.dataset.order = rid; // marca ordem de inserção
+  const vPreco=fmtInput(d.preco), vLpa=fmtInput(d.lpa), vPayout=fmtInput(d.payout);
+  const vCagr=fmtInput(d.cagr), vDy=fmtInput(d.dy), vTempo=d.tempo||'';
+  tr.innerHTML=`
+    <td><div style="display:flex;align-items:center;gap:4px">
+      <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK3" style="width:80px" oninput="updateAcoesRow(${rid})">
+      <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
+    </div></td>
+    <td><input class="table-input" data-f="preco"  inputmode="decimal" value="${vPreco}"  placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:88px"></td>
+    <td><input class="table-input" data-f="lpa"    inputmode="decimal" value="${vLpa}"    placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
+    <td><input class="table-input" data-f="payout" inputmode="decimal" value="${vPayout}" placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
+    <td><input class="table-input" data-f="cagr"   inputmode="decimal" value="${vCagr}"   placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="dy"     inputmode="decimal" value="${vDy}"     placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="tempo"  inputmode="numeric" value="${vTempo}"  placeholder="5" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:52px"></td>
+    <td style="text-align:center"><span data-r="lpaFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
+    <td style="text-align:center"><span data-r="divFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
+    <td style="text-align:center"><span data-r="teto"   class="result-cell preco-teto-cell">—</span></td>
+    <td style="text-align:center"><span data-r="margem" class="result-cell result-neutral">—</span></td>
+    <td><span class="del-btn" onclick="deleteRow('acoes-row-${rid}',updateAcoesStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
+  tbody.appendChild(tr);
+  if (d.preco&&d.lpa) updateAcoesRow(rid);
 }
 
 function updateAcoesRow(rid) {
@@ -1003,34 +1071,7 @@ function updateAcoesRow(rid) {
     row.classList.remove('row-opp'); if(starEl) starEl.innerHTML='';
   }
   updateAcoesStats();
-  sortTableByMargem('acoes-tbody');
-}
-
-function addAcoesRow(data) {
-  const d=data||{ticker:'',preco:'',lpa:'',payout:'',cagr:10,dy:8,tempo:5};
-  const rid=++acoesRowId;
-  const tbody=document.getElementById('acoes-tbody');
-  const tr=document.createElement('tr'); tr.id='acoes-row-'+rid;
-  const vPreco=fmtInput(d.preco), vLpa=fmtInput(d.lpa), vPayout=fmtInput(d.payout);
-  const vCagr=fmtInput(d.cagr), vDy=fmtInput(d.dy), vTempo=d.tempo||'';
-  tr.innerHTML=`
-    <td><div style="display:flex;align-items:center;gap:4px">
-      <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK3" style="width:80px" oninput="updateAcoesRow(${rid})">
-      <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
-    </div></td>
-    <td><input class="table-input" data-f="preco"  inputmode="decimal" value="${vPreco}"  placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:88px"></td>
-    <td><input class="table-input" data-f="lpa"    inputmode="decimal" value="${vLpa}"    placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
-    <td><input class="table-input" data-f="payout" inputmode="decimal" value="${vPayout}" placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
-    <td><input class="table-input" data-f="cagr"   inputmode="decimal" value="${vCagr}"   placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:64px"></td>
-    <td><input class="table-input" data-f="dy"     inputmode="decimal" value="${vDy}"     placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:64px"></td>
-    <td><input class="table-input" data-f="tempo"  inputmode="numeric" value="${vTempo}"  placeholder="5" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:52px"></td>
-    <td style="text-align:center"><span data-r="lpaFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
-    <td style="text-align:center"><span data-r="divFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
-    <td style="text-align:center"><span data-r="teto"   class="result-cell preco-teto-cell">—</span></td>
-    <td style="text-align:center"><span data-r="margem" class="result-cell result-neutral">—</span></td>
-    <td><span class="del-btn" onclick="deleteRow('acoes-row-${rid}',updateAcoesStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
-  tbody.appendChild(tr);
-  if (d.preco&&d.lpa) updateAcoesRow(rid);
+  // removida ordenação automática ao editar
 }
 
 function updateAcoesStats() {
@@ -1052,6 +1093,33 @@ function calcFiis(preco,div12m,ipca,ipcaMais,premio) {
   const dyTotal=(ipca+ipcaMais+premio)/100; if(dyTotal<=0) return null;
   const teto=div12m/dyTotal, margem=(teto-preco)/preco*100;
   return {dyTotal:dyTotal*100,teto,margem};
+}
+
+function addFiisRow(data) {
+  const d=data||{ticker:'',pvp:'',preco:'',div12m:'',ipca:0,ipcaMais:7,premio:3};
+  const rid=++fiisRowId;
+  const tbody=document.getElementById('fiis-tbody');
+  const tr=document.createElement('tr'); tr.id='fiis-row-'+rid;
+  tr.dataset.order = rid; // marca ordem de inserção
+  const vPvp=fmtInput(d.pvp), vPreco=fmtInput(d.preco), vDiv=fmtInput(d.div12m);
+  const vIpca=fmtInput(d.ipca), vIpcaMais=fmtInput(d.ipcaMais), vPremio=fmtInput(d.premio);
+  tr.innerHTML=`
+    <td><div style="display:flex;align-items:center;gap:4px">
+      <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:80px" oninput="updateFiisRow(${rid})">
+      <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
+    </div></td>
+    <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
+    <td><input class="table-input" data-f="div12m"   inputmode="decimal" value="${vDiv}"      placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:80px"></td>
+    <td><input class="table-input" data-f="ipca"     inputmode="decimal" value="${vIpca}"     placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
+    <td><input class="table-input" data-f="ipcaMais" inputmode="decimal" value="${vIpcaMais}" placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
+    <td><input class="table-input" data-f="premio"   inputmode="decimal" value="${vPremio}"   placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
+    <td style="text-align:center"><span data-r="dyTotal" class="result-cell result-neutral" style="font-size:12px">—</span></td>
+    <td style="text-align:center"><span data-r="teto"    class="result-cell preco-teto-cell">—</span></td>
+    <td style="text-align:center"><span data-r="margem"  class="result-cell result-neutral">—</span></td>
+    <td><span class="del-btn" onclick="deleteRow('fiis-row-${rid}',updateFiisStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
+  tbody.appendChild(tr);
+  if (d.preco&&d.div12m) updateFiisRow(rid);
 }
 
 function updateFiisRow(rid) {
@@ -1078,33 +1146,7 @@ function updateFiisRow(rid) {
     row.classList.remove('row-opp'); if(starEl) starEl.innerHTML='';
   }
   updateFiisStats();
-  sortTableByMargem('fiis-tbody');
-}
-
-function addFiisRow(data) {
-  const d=data||{ticker:'',pvp:'',preco:'',div12m:'',ipca:0,ipcaMais:7,premio:3};
-  const rid=++fiisRowId;
-  const tbody=document.getElementById('fiis-tbody');
-  const tr=document.createElement('tr'); tr.id='fiis-row-'+rid;
-  const vPvp=fmtInput(d.pvp), vPreco=fmtInput(d.preco), vDiv=fmtInput(d.div12m);
-  const vIpca=fmtInput(d.ipca), vIpcaMais=fmtInput(d.ipcaMais), vPremio=fmtInput(d.premio);
-  tr.innerHTML=`
-    <td><div style="display:flex;align-items:center;gap:4px">
-      <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:80px" oninput="updateFiisRow(${rid})">
-      <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
-    </div></td>
-    <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
-    <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
-    <td><input class="table-input" data-f="div12m"   inputmode="decimal" value="${vDiv}"      placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:80px"></td>
-    <td><input class="table-input" data-f="ipca"     inputmode="decimal" value="${vIpca}"     placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
-    <td><input class="table-input" data-f="ipcaMais" inputmode="decimal" value="${vIpcaMais}" placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
-    <td><input class="table-input" data-f="premio"   inputmode="decimal" value="${vPremio}"   placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
-    <td style="text-align:center"><span data-r="dyTotal" class="result-cell result-neutral" style="font-size:12px">—</span></td>
-    <td style="text-align:center"><span data-r="teto"    class="result-cell preco-teto-cell">—</span></td>
-    <td style="text-align:center"><span data-r="margem"  class="result-cell result-neutral">—</span></td>
-    <td><span class="del-btn" onclick="deleteRow('fiis-row-${rid}',updateFiisStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
-  tbody.appendChild(tr);
-  if (d.preco&&d.div12m) updateFiisRow(rid);
+  // removida ordenação automática ao editar
 }
 
 function updateFiisStats() {
