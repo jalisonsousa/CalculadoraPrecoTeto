@@ -246,8 +246,8 @@
       <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
     </summary>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-      <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">P/VP</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → Indicadores → P/VP</p></div></div>
-      <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → preço no topo da página</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → preço no topo da página</p></div></div>
+      <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">P/VP</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → Indicadores → P/VP</p></div></div>
       <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Dividendo 12M</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Proventos</span> → soma dos últimos 12 meses</p></div></div>
       <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">IPCA do FII (%)</div><p style="font-size:12px;color:var(--text2)"><span class="badge badge-green">Tijolo=0%</span> <span class="badge" style="background:rgba(251,191,36,0.1);color:var(--gold);">Papel=5%</span> <span class="badge badge-orange">Híbrido=2,5%</span></p></div></div>
       <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">IPCA+ (%)</div><p style="font-size:12px;color:var(--text2)">Taxa Tesouro IPCA+ longo prazo. Padrão atual: ~7%</p></div></div>
@@ -267,8 +267,8 @@
               <button class="del-btn" style="padding:3px 6px" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
             </div>
           </th>
-          <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
           <th style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
+          <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
           <th style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
           <th style="min-width:68px">IPCA % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>IPCA do FII</strong><br>Tijolo: 0% · Papel: ~5% · Híbrido: ~2,5%"></i></th>
           <th style="min-width:68px">IPCA+ % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Tesouro IPCA+ longo prazo. Padrão atual: ~7%"></i></th>
