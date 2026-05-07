@@ -10,13 +10,14 @@ function calcFiis(preco, div12m, ipca, ipcaMais, premio) {
 }
 
 function addFiisRow(data) {
-  const d   = data || { ticker:'', pvp:'', preco:'', div12m:'', ipca:0, ipcaMais:7, premio:3 };
+  const d   = data || { ticker:'', qty:'', pvp:'', preco:'', div12m:'', ipca:0, ipcaMais:7, premio:3 };
   const rid = ++fiisRowId;
   const tbody = document.getElementById('fiis-tbody');
   const tr    = document.createElement('tr');
   tr.id           = 'fiis-row-' + rid;
   tr.dataset.order = rid;
 
+  const vQty     = fmtInput(d.qty);
   const vPvp     = fmtInput(d.pvp);
   const vPreco   = fmtInput(d.preco);
   const vDiv     = fmtInput(d.div12m);
@@ -30,6 +31,7 @@ function addFiisRow(data) {
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:76px" oninput="updateFiisRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
     </div></td>
+    <td><input class="table-input" data-f="qty"      inputmode="numeric"  value="${vQty}"      placeholder="0"    oninput="numericInput(this)" style="width:56px"></td>
     <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
     <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
     <td><input class="table-input" data-f="div12m"   inputmode="decimal" value="${vDiv}"      placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:80px"></td>
@@ -94,8 +96,8 @@ function updateFiisStats() {
     else                               neutro++;
   });
   document.getElementById('fiis-stats').innerHTML = `
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--accent)">${total}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Total de FIIs</div></div>
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--green)">${oport}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Em Oportunidade</div></div>
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--orange)">${neutro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Próximo do Teto</div></div>
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--red)">${caro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Acima do Teto</div></div>`;
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--accent)">${total}</div><div class="stat-card-lbl">Total de FIIs</div></div>
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--green)">${oport}</div><div class="stat-card-lbl">Em Oportunidade</div></div>
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--orange)">${neutro}</div><div class="stat-card-lbl">Próximo do Teto</div></div>
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--red)">${caro}</div><div class="stat-card-lbl">Acima do Teto</div></div>`;
 }

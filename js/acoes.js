@@ -97,8 +97,8 @@ function updateAcoesStats() {
     else                               neutro++;
   });
   document.getElementById('acoes-stats').innerHTML = `
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--accent)">${total}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Total de Ações</div></div>
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--green)">${oport}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Em Oportunidade</div></div>
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--orange)">${neutro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Próximo do Teto</div></div>
-    <div class="stat-card"><div style="font-size:22px;font-weight:800;color:var(--red)">${caro}</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Acima do Teto</div></div>`;
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--accent)">${total}</div><div class="stat-card-lbl">Total de Ações</div></div>
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--green)">${oport}</div><div class="stat-card-lbl">Em Oportunidade</div></div>
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--orange)">${neutro}</div><div class="stat-card-lbl">Próximo do Teto</div></div>
+    <div class="stat-card"><div class="stat-card-val" style="color:var(--red)">${caro}</div><div class="stat-card-lbl">Acima do Teto</div></div>`;
 }

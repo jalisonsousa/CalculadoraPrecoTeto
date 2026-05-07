@@ -52,11 +52,29 @@ function showToast(msg, warn) {
 }
 
 // ===== TABS =====
+const TAB_TITLES = { acoes: 'Ações', fiis: 'FIIs', proventos: 'Proventos FIIs' };
+
 function switchTab(tab) {
-  ['acoes', 'fiis'].forEach(t => {
-    document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab);
-    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+  ['acoes', 'fiis', 'proventos'].forEach(t => {
+    const navEl = document.getElementById('nav-' + t);
+    const tabEl = document.getElementById('tab-' + t);
+    if (navEl) navEl.classList.toggle('active', t === tab);
+    if (tabEl) tabEl.classList.toggle('active', t === tab);
   });
+  const title = document.getElementById('top-bar-title');
+  if (title) title.textContent = TAB_TITLES[tab] || '';
+  if (tab === 'proventos') updateProventos();
+  closeSidebar();
+}
+
+// ===== SIDEBAR (mobile) =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
 }
 
 // ===== TICKER LINKS =====

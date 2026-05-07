@@ -15,6 +15,7 @@ function collectCurrentData() {
   document.querySelectorAll('#fiis-tbody tr').forEach(row => {
     fiis.push({
       ticker:   row.querySelector('[data-f="ticker"]').value || '',
+      qty:      pi(row.querySelector('[data-f="qty"]')?.value) || 0,
       pvp:      pf(row.querySelector('[data-f="pvp"]').value),
       preco:    pf(row.querySelector('[data-f="preco"]').value),
       div12m:   pf(row.querySelector('[data-f="div12m"]').value),
