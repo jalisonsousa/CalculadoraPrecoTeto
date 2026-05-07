@@ -30,8 +30,8 @@ function addFiisRow(data) {
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:76px" oninput="updateFiisRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
     </div></td>
-    <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
     <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
+    <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
     <td><input class="table-input" data-f="div12m"   inputmode="decimal" value="${vDiv}"      placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:80px"></td>
     <td><input class="table-input" data-f="ipca"     inputmode="decimal" value="${vIpca}"     placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
     <td><input class="table-input" data-f="ipcaMais" inputmode="decimal" value="${vIpcaMais}" placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
