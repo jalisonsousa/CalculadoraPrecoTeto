@@ -26,7 +26,7 @@ function addFiisRow(data) {
 
   tr.innerHTML = `
     <td><div style="display:flex;align-items:center;gap:3px">
-      <a class="ticker-link" onclick="openTickerLink(this,'fiis')" href="javascript:void(0)" title="Abrir no Funds Explorer" tabindex="-1"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+      <a class="ticker-link" onclick="openTickerLink(this,'fiis')" title="Abrir no Funds Explorer" tabindex="-1" style="cursor:pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:76px" oninput="updateFiisRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
     </div></td>

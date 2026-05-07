@@ -61,12 +61,16 @@ function switchTab(tab) {
 
 // ===== TICKER LINKS =====
 function openTickerLink(el, type) {
-  const ticker = el.closest('div').querySelector('[data-f="ticker"]').value.trim().toLowerCase();
+  const ticker = el.closest('div').querySelector('[data-f="ticker"]').value.trim();
   if (!ticker) return;
   const url = type === 'fiis'
-    ? `https://www.fundsexplorer.com.br/funds/${ticker}`
-    : `https://investidor10.com.br/acoes/${ticker}/`;
-  window.open(url, '_blank');
+    ? `https://www.fundsexplorer.com.br/funds/${ticker.toLowerCase()}`
+    : `https://investidor10.com.br/acoes/${ticker.toLowerCase()}/`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.click();
 }
 
 // ===== DELETE ROW =====

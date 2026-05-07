@@ -26,7 +26,7 @@ function addAcoesRow(data) {
 
   tr.innerHTML = `
     <td><div style="display:flex;align-items:center;gap:3px">
-      <a class="ticker-link" onclick="openTickerLink(this,'acoes')" href="javascript:void(0)" title="Abrir no Investidor10" tabindex="-1"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+      <a class="ticker-link" onclick="openTickerLink(this,'acoes')" title="Abrir no Investidor10" tabindex="-1" style="cursor:pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK3" style="width:76px" oninput="updateAcoesRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
     </div></td>
