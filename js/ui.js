@@ -82,7 +82,7 @@ function openTickerLink(el, type) {
   const ticker = el.closest('div').querySelector('[data-f="ticker"]').value.trim();
   if (!ticker) return;
   const url = type === 'fiis'
-    ? `https://www.fundsexplorer.com.br/funds/${ticker.toLowerCase()}`
+    ? `https://investidor10.com.br/fiis/${ticker.toLowerCase()}`
     : `https://investidor10.com.br/acoes/${ticker.toLowerCase()}/`;
   const a = document.createElement('a');
   a.href = url;
