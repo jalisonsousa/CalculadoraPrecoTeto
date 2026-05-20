@@ -24,6 +24,10 @@
 
   document.addEventListener('mouseover', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el); });
   document.addEventListener('mouseout',  e => { const el = e.target.closest('[data-tip]'); if (el) hideTip(); });
+
+  tip.addEventListener('mouseover', () => clearTimeout(hideTimer));
+  tip.addEventListener('mouseout',  () => hideTip());
+
   document.addEventListener('click',     e => {
     const el = e.target.closest('[data-tip]');
     if (el) { tip.classList.contains('visible') ? tip.classList.remove('visible') : showTip(el); }

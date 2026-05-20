@@ -10,7 +10,7 @@ function calcFiis(preco, div12m, ipca, ipcaMais, premio) {
 }
 
 function addFiisRow(data) {
-  const d   = data || { ticker:'', qty:'', pvp:'', preco:'', div12m:'', ipca:0, ipcaMais:7, premio:3 };
+  const d   = data || { ticker:'', qty:'', pmedio:'', pvp:'', preco:'', div12m:'', ipca:0, ipcaMais:7, premio:3 };
   const rid = ++fiisRowId;
   const tbody = document.getElementById('fiis-tbody');
   const tr    = document.createElement('tr');
@@ -18,6 +18,7 @@ function addFiisRow(data) {
   tr.dataset.order = rid;
 
   const vQty     = fmtInput(d.qty);
+  const vPmedio  = fmtInput(d.pmedio);
   const vPvp     = fmtInput(d.pvp);
   const vPreco   = fmtInput(d.preco);
   const vDiv     = fmtInput(d.div12m);
@@ -30,10 +31,12 @@ function addFiisRow(data) {
       <a class="ticker-link" onclick="openTickerLink(this,'fiis')" title="Abrir no Investidor10" tabindex="-1" style="cursor:pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:76px" oninput="updateFiisRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
+      <button class="brapi-btn" onclick="fetchRowBrapi(${rid},'fiis')" title="Buscar Preço, P/VP e Div.12M (brapi.dev)" tabindex="-1"><i class="fa-solid fa-rotate"></i></button>
     </div></td>
-    <td><input class="table-input" data-f="qty"      inputmode="numeric"  value="${vQty}"      placeholder="0"    oninput="numericInput(this)" style="width:56px"></td>
-    <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
+    <td><input class="table-input" data-f="qty"      inputmode="numeric"  value="${vQty}"      placeholder="0"    oninput="numericInput(this)" style="width:52px"></td>
+    <td><input class="table-input" data-f="pmedio"  inputmode="decimal" value="${vPmedio}"  placeholder="0,00" oninput="numericInput(this)" style="width:88px"></td>
     <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
+    <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
     <td><input class="table-input" data-f="div12m"   inputmode="decimal" value="${vDiv}"      placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:80px"></td>
     <td><input class="table-input" data-f="ipca"     inputmode="decimal" value="${vIpca}"     placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>
     <td><input class="table-input" data-f="ipcaMais" inputmode="decimal" value="${vIpcaMais}" placeholder="%" oninput="numericInput(this);updateFiisRow(${rid})" style="width:60px"></td>

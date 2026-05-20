@@ -1,44 +1,44 @@
-// ===== CLOUD STATUS =====
-function setCloudStatus(state, text) {
-  const colors = { loading:'var(--text3)', ok:'var(--green)', error:'var(--red)', saving:'var(--accent)' };
-  const icons  = { loading:'fa-solid fa-circle-notch fa-spin', ok:'fa-solid fa-cloud-arrow-up', error:'fa-solid fa-cloud-exclamation', saving:'fa-solid fa-circle-notch fa-spin' };
-  const icon  = document.querySelector('#sticky-cloud-status i');
-  const label = document.getElementById('sticky-cloud-label');
-  if (icon)  { icon.className = icons[state]; icon.style.color = colors[state]; }
-  if (label) { label.textContent = text; label.style.color = colors[state]; }
+// ===== SYNC STATE — botão unificado de status + salvar =====
+function _syncApply(icon, label, color, disabled) {
+  const btn = document.getElementById('sticky-save-btn');
+  const ico = document.getElementById('sync-icon');
+  const lbl = document.getElementById('sync-label');
+  if (!btn) return;
+  btn.disabled      = disabled;
+  btn.style.color   = color;
+  btn.style.borderColor = disabled ? '' : color;
+  if (ico) ico.className    = icon;
+  if (lbl) lbl.textContent  = label;
+}
+
+function setCloudStatus(state) {
+  const cfg = {
+    loading: ['fa-solid fa-circle-notch fa-spin', 'Carregando…',  'var(--text3)',  true ],
+    ok:      ['fa-solid fa-cloud-arrow-up',        'Sincronizado', 'var(--green)',  false],
+    saving:  ['fa-solid fa-circle-notch fa-spin',  'Salvando…',    'var(--accent)', true ],
+    error:   ['fa-solid fa-cloud-exclamation',     'Sem conexão',  'var(--orange)', false],
+  };
+  const [icon, label, color, disabled] = cfg[state] ?? cfg.ok;
+  _syncApply(icon, label, color, disabled);
+}
+
+function setSaveBtnState(state) {
+  if (state === 'loading') {
+    _syncApply('fa-solid fa-circle-notch fa-spin', 'Salvando…', 'var(--accent)', true);
+  } else if (state === 'saved') {
+    _syncApply('fa-solid fa-check', 'Salvo!', 'var(--green)', true);
+  } else {
+    _syncApply('fa-solid fa-cloud-arrow-up', 'Sincronizado', 'var(--green)', false);
+  }
 }
 
 // ===== SAVE TIME =====
 function updateSaveTime(iso) {
   if (!iso) return;
-  const d = new Date(iso);
+  const d  = new Date(iso);
   const el = document.getElementById('sticky-save-time');
-  if (el) el.textContent = 'Salvo: ' + d.toLocaleDateString('pt-BR') + ' ' +
+  if (el) el.textContent = d.toLocaleDateString('pt-BR') + ' ' +
     d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-}
-
-// ===== SAVE BUTTON STATE (atualiza ambos os botões) =====
-function setSaveBtnState(state) {
-  const btns = [
-    document.getElementById('save-btn'),
-    document.getElementById('sticky-save-btn'),
-  ];
-  btns.forEach(btn => {
-    if (!btn) return;
-    const isCompact = btn.id === 'sticky-save-btn';
-    const label = isCompact ? 'Salvar' : 'Salvar na nuvem';
-    if (state === 'loading') {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Salvando...';
-    } else if (state === 'saved') {
-      btn.classList.add('saved');
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> Salvo!';
-    } else {
-      btn.classList.remove('saved');
-      btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> ${label}`;
-    }
-  });
 }
 
 // ===== TOAST =====
@@ -52,10 +52,10 @@ function showToast(msg, warn) {
 }
 
 // ===== TABS =====
-const TAB_TITLES = { acoes: 'Ações', fiis: 'FIIs', proventos: 'Proventos FIIs' };
+const TAB_TITLES = { acoes: 'Ações', fiis: 'FIIs', proventos: 'Proventos FIIs', dashboard: 'Dashboard', carteira: 'Carteira' };
 
 function switchTab(tab) {
-  ['acoes', 'fiis', 'proventos'].forEach(t => {
+  ['acoes', 'fiis', 'proventos', 'dashboard', 'carteira'].forEach(t => {
     const navEl = document.getElementById('nav-' + t);
     const tabEl = document.getElementById('tab-' + t);
     if (navEl) navEl.classList.toggle('active', t === tab);
@@ -64,6 +64,8 @@ function switchTab(tab) {
   const title = document.getElementById('top-bar-title');
   if (title) title.textContent = TAB_TITLES[tab] || '';
   if (tab === 'proventos') updateProventos();
+  if (tab === 'dashboard') updateDashboard();
+  if (tab === 'carteira')  updateCarteira();
   closeSidebar();
 }
 
@@ -107,5 +109,7 @@ function loadDataIntoTables(data) {
   (data.fiis  || []).forEach(d => addFiisRow(d));
   updateAcoesStats();
   updateFiisStats();
+  const metaInput = document.getElementById('meta-renda-input');
+  if (metaInput && data.metaRenda) metaInput.value = data.metaRenda;
 }
 

@@ -78,6 +78,33 @@ header {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   box-shadow: 0 3px 12px rgba(34,197,94,0.25);
 }
+.brapi-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--accent2);
+  font-size: 11px;
+  padding: 2px 3px;
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+}
+.brapi-btn:hover { opacity: 1; color: var(--accent); }
+.brapi-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+.field-needs-input {
+  border-color: var(--orange) !important;
+  box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.18) !important;
+  color: var(--orange) !important;
+}
+.field-needs-input::placeholder {
+  color: var(--orange);
+  opacity: 0.85;
+  font-style: italic;
+  font-size: 10px;
+}
+
 .btn-secondary {
   background: var(--surface);
   color: var(--text2);
@@ -109,6 +136,31 @@ header {
   border: 1px solid var(--border);
   border-radius: 100px;
   padding: 5px 10px;
+}
+
+/* Botão unificado salvar + status */
+.save-sync-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 13px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--green);
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+  white-space: nowrap;
+}
+.save-sync-btn:hover:not(:disabled) {
+  background: var(--accent-glow);
+}
+.save-sync-btn:disabled {
+  cursor: default;
+  border-color: var(--border) !important;
+  opacity: 0.75;
 }
 
 /* ===== TABS ===== */
@@ -162,6 +214,7 @@ header {
   text-align: left;
 }
 .calc-table th.result-col { background: var(--th-bg); text-align: center; }
+.th-req { border-bottom-color: var(--accent) !important; color: var(--text) !important; }
 .calc-table td.result-col { text-align: center; }
 .calc-table td { text-align: left; }
 
@@ -305,7 +358,7 @@ header {
   box-shadow: 0 8px 30px rgba(0,0,0,0.2);
   pointer-events: none; opacity: 0; transition: opacity 0.15s;
 }
-#g-tip.visible { opacity: 1; }
+#g-tip.visible { opacity: 1; pointer-events: auto; }
 #g-tip::after { content:''; position:absolute; top:100%; left:20px; border:6px solid transparent; border-top-color: var(--border2); }
 #g-tip.flip-down::after { display:none; }
 #g-tip.flip-down::before { content:''; position:absolute; bottom:100%; left:20px; border:6px solid transparent; border-bottom-color:var(--border2); }
@@ -420,6 +473,66 @@ details[open] summary .chevron { transform: rotate(180deg); }
 /* ===== RESPONSIVE: TABLET (< 1024px) ===== */
 @media (max-width: 1023px) {
   main { padding-left: 16px; padding-right: 16px; }
+}
+
+/* ===== DASHBOARD CHART ===== */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr; }
+}
+
+.mchart-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+.mchart-row:last-child { border-bottom: none; }
+.mchart-ticker {
+  font-size: 11px; font-weight: 700; color: var(--accent2);
+  width: 58px; flex-shrink: 0; text-align: right;
+}
+.mchart-bars {
+  flex: 1; display: flex; align-items: center; height: 14px;
+}
+.mchart-neg-area {
+  flex: 1; display: flex; justify-content: flex-end; height: 100%;
+}
+.mchart-pos-area { flex: 1; height: 100%; }
+.mchart-center {
+  width: 2px; height: 18px;
+  background: var(--border2); flex-shrink: 0;
+}
+.mchart-fill {
+  height: 100%; border-radius: 2px;
+  transition: width 0.4s ease; min-width: 0;
+}
+.mchart-fill.good { background: var(--green); }
+.mchart-fill.warn { background: var(--orange); }
+.mchart-fill.bad  { background: var(--red); }
+.mchart-pct {
+  font-size: 11px; font-weight: 700;
+  width: 52px; text-align: right;
+  flex-shrink: 0; white-space: nowrap;
+}
+.mchart-pct.good { color: var(--green); }
+.mchart-pct.warn { color: var(--orange); }
+.mchart-pct.bad  { color: var(--red); }
+
+/* ===== META RENDA ===== */
+.meta-progress-track {
+  height: 10px; background: var(--surface2);
+  border-radius: 10px; overflow: hidden;
+}
+.meta-progress-fill {
+  height: 100%; border-radius: 10px;
+  transition: width 0.5s ease;
+  background: linear-gradient(90deg, var(--accent), var(--green));
 }
 
 /* ===== RESPONSIVE: MOBILE (< 640px) ===== */

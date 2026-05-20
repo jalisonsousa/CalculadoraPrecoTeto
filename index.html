@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Preço Teto | Ações & FIIs</title>
+  <title>Calculadora Preço Teto</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,6 +15,38 @@
 
 <div id="g-tip"></div>
 <div id="toast"><i class="fa-solid fa-floppy-disk toast-icon" id="toast-icon"></i><span id="toast-msg">Dados salvos!</span></div>
+
+<!-- ===== MODAL TOKEN BRAPI ===== -->
+<div id="brapi-token-modal" style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)brapiCloseTokenModal()">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,0.7)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="font-size:15px;font-weight:700;color:var(--text)">
+        <i class="fa-solid fa-key mr-2" style="color:var(--accent)"></i>Token brapi.dev
+      </h3>
+      <button onclick="brapiCloseTokenModal()" style="background:transparent;border:0;cursor:pointer;color:var(--text2);font-size:20px;line-height:1;padding:4px 8px">×</button>
+    </div>
+    <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:12px">
+      Para buscar dados automaticamente, você precisa de um <strong style="color:var(--text)">token gratuito</strong> do brapi.dev.
+    </p>
+    <ol style="font-size:12px;color:var(--text2);padding-left:18px;line-height:2.1;margin-bottom:16px">
+      <li>Acesse <a href="https://brapi.dev" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">brapi.dev</a> e crie uma conta gratuita</li>
+      <li>No painel da conta, clique em <strong style="color:var(--text)">Tokens</strong> e copie seu token</li>
+      <li>Cole abaixo e salve</li>
+    </ol>
+    <input id="brapi-token-input" class="table-input" placeholder="Cole seu token aqui..." style="width:100%;font-size:12px;padding:10px 14px;margin-bottom:14px;font-family:monospace;letter-spacing:0.03em" onkeydown="if(event.key==='Enter')brapiSaveToken()">
+    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
+      <button class="action-btn btn-danger" id="brapi-remove-btn" onclick="brapiRemoveToken()" style="font-size:11px;padding:6px 12px;display:none">
+        <i class="fa-solid fa-trash"></i> Remover
+      </button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="action-btn btn-secondary" onclick="brapiCloseTokenModal()" style="font-size:12px;padding:7px 14px">Cancelar</button>
+        <button class="action-btn btn-primary" onclick="brapiSaveToken()" style="font-size:12px;padding:7px 14px">
+          <i class="fa-solid fa-floppy-disk"></i> Salvar token
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== MODAL SIMULADOR DE APORTE ===== -->
 <div id="sim-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)closeSimulator()">
@@ -54,7 +86,7 @@
       </div>
       <div>
         <div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.2">Preço Teto</div>
-        <div style="font-size:10px;color:var(--text2);margin-top:1px">A Cara da Riqueza</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:1px">Jalison</div>
       </div>
     </div>
   </div>
@@ -71,6 +103,12 @@
     <button class="sidebar-nav-item" id="nav-proventos" onclick="switchTab('proventos')">
       <i class="fa-solid fa-hand-holding-dollar"></i> Proventos FIIs
     </button>
+    <button class="sidebar-nav-item" id="nav-dashboard" onclick="switchTab('dashboard')">
+      <i class="fa-solid fa-chart-bar"></i> Dashboard
+    </button>
+    <button class="sidebar-nav-item" id="nav-carteira" onclick="switchTab('carteira')">
+      <i class="fa-solid fa-wallet"></i> Carteira
+    </button>
   </nav>
 
   <div class="sidebar-bottom">
@@ -83,6 +121,10 @@
     <a href="https://www.youtube.com/@ACaraDaRiqueza" target="_blank" class="sidebar-ext-link">
       <i class="fa-brands fa-youtube"></i> Canal
     </a>
+    <div style="height:1px;background:var(--border);margin:6px 4px"></div>
+    <button id="brapi-sidebar-status" class="action-btn btn-secondary" style="width:100%;justify-content:flex-start;padding:7px 12px;font-size:12px;border-radius:8px;gap:7px" onclick="brapiOpenTokenModal()">
+      <i class="fa-solid fa-key" style="color:var(--orange)"></i> brapi.dev <span style="color:var(--orange);font-size:10px">● sem token</span>
+    </button>
     <div style="height:1px;background:var(--border);margin:6px 4px"></div>
     <button class="theme-toggle" style="width:100%;justify-content:flex-start;border-radius:8px" onclick="toggleTheme()">
       <i id="theme-icon" class="fa-solid fa-moon"></i>
@@ -103,16 +145,12 @@
       <button class="hamburger" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
       <span class="top-bar-title" id="top-bar-title">Ações</span>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div id="sticky-cloud-status" class="cloud-chip" style="font-size:11px;padding:4px 9px">
-        <i class="fa-solid fa-cloud" style="font-size:11px"></i>
-        <span id="sticky-cloud-label">...</span>
-      </div>
-      <div style="width:1px;height:18px;background:var(--border);flex-shrink:0"></div>
-      <button class="action-btn btn-primary btn-compact" onclick="saveData()" id="sticky-save-btn">
-        <i class="fa-solid fa-floppy-disk"></i> Salvar
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="sticky-save-btn" class="save-sync-btn" onclick="saveData()">
+        <i id="sync-icon" class="fa-solid fa-cloud-arrow-up"></i>
+        <span id="sync-label">...</span>
       </button>
-      <span class="save-time" id="sticky-save-time" style="font-size:10px"></span>
+      <span class="save-time" id="sticky-save-time"></span>
     </div>
   </div>
 
@@ -186,12 +224,14 @@
                 <button class="del-btn" style="padding:3px 6px" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
               </div>
             </th>
-            <th style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual</strong><br>Cotação atual da ação. Investidor10 → busque a ação → preço no topo."></i></th>
-            <th style="min-width:80px">LPA Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido ÷ nº de ações. Investidor10 → Ação → Indicadores → LPA."></i></th>
-            <th style="min-width:80px">Payout % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos. Use média dos últimos 3–5 anos."></i></th>
-            <th style="min-width:72px">CAGR Lu % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>CAGR de Lucros</strong><br>Taxa de crescimento anual do lucro. Use média histórica 3–5 anos."></i></th>
-            <th style="min-width:72px">DY Des. % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividend Yield Desejado</strong><br>Rentabilidade mínima desejada. Padrão: 8% a.a."></i></th>
-            <th style="min-width:60px">Tempo <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Tempo de Projeção (anos)</strong><br>Anos à frente para projetar o lucro. Padrão: 5 anos."></i></th>
+            <th style="min-width:58px">Qtd. <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Quantidade de ações</strong><br>Cotas que você possui. Usado na Carteira para calcular P&amp;L."></i></th>
+            <th style="min-width:96px">Preço Médio <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Médio de compra</strong><br>Custo médio das suas ações. Usado para calcular P&amp;L na Carteira."></i></th>
+            <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual</strong><br>Cotação atual da ação. Investidor10 → busque a ação → preço no topo."></i></th>
+            <th class="th-req" style="min-width:80px">LPA Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido ÷ nº de ações. Investidor10 → Ação → Indicadores → LPA."></i></th>
+            <th class="th-req" style="min-width:80px">Payout % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos. Use média dos últimos 3–5 anos."></i></th>
+            <th class="th-req" style="min-width:72px">CAGR Lu % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>CAGR de Lucros</strong><br>Taxa de crescimento anual do lucro. Use média histórica 3–5 anos."></i></th>
+            <th class="th-req" style="min-width:72px">DY Des. % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividend Yield Desejado</strong><br>Rentabilidade mínima desejada. Padrão: 8% a.a."></i></th>
+            <th class="th-req" style="min-width:60px">Tempo <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Tempo de Projeção (anos)</strong><br>Anos à frente para projetar o lucro. Padrão: 5 anos."></i></th>
             <th class="result-col" style="min-width:95px"><span style="color:var(--accent2)">LPA Futuro</span></th>
             <th class="result-col" style="min-width:100px"><span style="color:var(--accent2)">Div. Futuro</span></th>
             <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
@@ -210,6 +250,7 @@
 
     <div class="flex items-center gap-4 mb-6 flex-wrap">
       <button class="add-row-btn" onclick="addAcoesRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar Ação</button>
+      <button id="brapi-all-acoes" class="action-btn btn-secondary" onclick="fetchAllBrapi('acoes')" style="padding:7px 14px;font-size:12px;gap:6px" title="Busca Preço e LPA de todas as ações via brapi.dev"><i class="fa-solid fa-rotate" style="margin-right:5px"></i>Atualizar todos</button>
       <button class="action-btn btn-secondary" onclick="openSimulator('acoes')" style="padding:7px 14px;font-size:12px;gap:6px"><i class="fa-solid fa-coins"></i> Simular Aporte</button>
       <div class="flex gap-3 flex-wrap legend-wrap" style="font-size:12px;color:var(--text2)">
         <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
@@ -290,13 +331,14 @@
                 <button class="del-btn" style="padding:3px 6px" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
               </div>
             </th>
-            <th style="min-width:60px">Qtd. <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Quantidade de cotas</strong><br>Cotas que você possui. Usado no painel de Proventos."></i></th>
-            <th style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
+            <th style="min-width:58px">Qtd. <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Quantidade de cotas</strong><br>Cotas que você possui. Usado no painel de Proventos e Carteira."></i></th>
+            <th style="min-width:96px">Preço Médio <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Médio de compra</strong><br>Custo médio das suas cotas. Usado para calcular P&amp;L na Carteira."></i></th>
             <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
-            <th style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
-            <th style="min-width:68px">IPCA % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>IPCA do FII</strong><br>Tijolo: 0% · Papel: ~5% · Híbrido: ~2,5%"></i></th>
-            <th style="min-width:68px">IPCA+ % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Tesouro IPCA+ longo prazo. Padrão atual: ~7%"></i></th>
-            <th style="min-width:68px">Prêmio % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Prêmio de Risco</strong><br>FIIs grandes: 1–2% · Médios: 2–3% · Menores: 3–4%"></i></th>
+            <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
+            <th class="th-req" style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
+            <th class="th-req" style="min-width:68px">IPCA % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>IPCA do FII</strong><br>Tijolo: 0% · Papel: ~5% · Híbrido: ~2,5%"></i></th>
+            <th class="th-req" style="min-width:68px">IPCA+ % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Tesouro IPCA+ longo prazo. Padrão atual: ~7%"></i></th>
+            <th class="th-req" style="min-width:68px">Prêmio % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Prêmio de Risco</strong><br>FIIs grandes: 1–2% · Médios: 2–3% · Menores: 3–4%"></i></th>
             <th class="result-col" style="min-width:70px"><span style="color:var(--text2);font-size:10px">DY Total</span></th>
             <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
             <th class="result-col" style="min-width:115px">
@@ -314,6 +356,7 @@
 
     <div class="flex items-center gap-4 mb-6 flex-wrap">
       <button class="add-row-btn" onclick="addFiisRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar FII</button>
+      <button id="brapi-all-fiis" class="action-btn btn-secondary" onclick="fetchAllBrapi('fiis')" style="padding:7px 14px;font-size:12px;gap:6px" title="Busca Preço, P/VP e Div.12M de todos os FIIs via brapi.dev"><i class="fa-solid fa-rotate" style="margin-right:5px"></i>Atualizar todos</button>
       <button class="action-btn btn-secondary" onclick="openSimulator('fiis')" style="padding:7px 14px;font-size:12px;gap:6px"><i class="fa-solid fa-coins"></i> Simular Aporte</button>
       <div class="flex gap-3 flex-wrap legend-wrap" style="font-size:12px;color:var(--text2)">
         <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
@@ -327,6 +370,19 @@
   <div id="tab-proventos" class="tab-content animate-in">
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5" id="prov-stats"></div>
+
+    <div class="card p-4 mb-4">
+      <div style="display:flex;align-items:center;margin-bottom:14px;gap:10px">
+        <h3 style="font-size:14px;font-weight:700;color:var(--text)">
+          <i class="fa-solid fa-bullseye" style="color:var(--green);margin-right:6px"></i>Meta de Renda Passiva Mensal
+        </h3>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <label style="font-size:12px;color:var(--text2);font-weight:600;flex-shrink:0">Meta mensal (R$):</label>
+        <input id="meta-renda-input" class="table-input" type="text" inputmode="decimal" placeholder="ex: 5.000,00" style="width:140px;font-size:13px;padding:7px 10px;text-align:left" oninput="numericInput(this);updateProventos()">
+      </div>
+      <div id="meta-renda-content"><p style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0">Digite sua meta mensal acima para ver o progresso.</p></div>
+    </div>
 
     <div class="card p-4 mb-4">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
@@ -345,6 +401,36 @@
 
   </div>
 
+  <!-- ========================= CARTEIRA TAB ========================= -->
+  <div id="tab-carteira" class="tab-content animate-in">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <h2 style="font-size:16px;font-weight:700;color:var(--text)">
+        <i class="fa-solid fa-wallet" style="color:var(--accent);margin-right:8px"></i>Carteira — Patrimônio &amp; P&amp;L
+      </h2>
+      <button class="action-btn btn-secondary" onclick="updateCarteira()" style="padding:5px 12px;font-size:11px;gap:5px">
+        <i class="fa-solid fa-rotate"></i> Atualizar
+      </button>
+    </div>
+    <div id="carteira-content"></div>
+
+  </div>
+
+  <!-- ========================= DASHBOARD TAB ========================= -->
+  <div id="tab-dashboard" class="tab-content animate-in">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <h2 style="font-size:16px;font-weight:700;color:var(--text)">
+        <i class="fa-solid fa-chart-bar" style="color:var(--accent);margin-right:8px"></i>Dashboard — Margens de Segurança
+      </h2>
+      <button class="action-btn btn-secondary" onclick="updateDashboard()" style="padding:5px 12px;font-size:11px;gap:5px">
+        <i class="fa-solid fa-rotate"></i> Atualizar
+      </button>
+    </div>
+    <div id="dashboard-content"></div>
+
+  </div>
+
   </main>
 
   <footer style="text-align:center;padding:18px;font-size:12px;border-top:1px solid var(--footer-border);color:var(--footer-text);margin-top:16px">
@@ -354,6 +440,7 @@
 
 </div><!-- end app-wrapper -->
 
+<script src="js/brapi.js"></script>
 <script src="js/config.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/theme.js"></script>
@@ -365,6 +452,8 @@
 <script src="js/tooltip.js"></script>
 <script src="js/simulator.js"></script>
 <script src="js/proventos.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/carteira.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

@@ -3,6 +3,8 @@ function collectCurrentData() {
   document.querySelectorAll('#acoes-tbody tr').forEach(row => {
     acoes.push({
       ticker: row.querySelector('[data-f="ticker"]').value || '',
+      qty:    pi(row.querySelector('[data-f="qty"]')?.value)    || 0,
+      pmedio: pf(row.querySelector('[data-f="pmedio"]')?.value),
       preco:  pf(row.querySelector('[data-f="preco"]').value),
       lpa:    pf(row.querySelector('[data-f="lpa"]').value),
       payout: pf(row.querySelector('[data-f="payout"]').value),
@@ -15,7 +17,8 @@ function collectCurrentData() {
   document.querySelectorAll('#fiis-tbody tr').forEach(row => {
     fiis.push({
       ticker:   row.querySelector('[data-f="ticker"]').value || '',
-      qty:      pi(row.querySelector('[data-f="qty"]')?.value) || 0,
+      qty:      pi(row.querySelector('[data-f="qty"]')?.value)    || 0,
+      pmedio:   pf(row.querySelector('[data-f="pmedio"]')?.value),
       pvp:      pf(row.querySelector('[data-f="pvp"]').value),
       preco:    pf(row.querySelector('[data-f="preco"]').value),
       div12m:   pf(row.querySelector('[data-f="div12m"]').value),
@@ -24,7 +27,15 @@ function collectCurrentData() {
       premio:   pf(row.querySelector('[data-f="premio"]').value)   || 3,
     });
   });
-  return { acoes, fiis, savedAt: new Date().toISOString() };
+  const brapiToken = brapiGetToken();
+  const metaRenda  = document.getElementById('meta-renda-input')?.value || '';
+  return { acoes, fiis, savedAt: new Date().toISOString(), ...(metaRenda && { metaRenda }), ...(brapiToken && { brapiToken }) };
+}
+
+function restoreBrapiToken(data) {
+  if (!data?.brapiToken) return;
+  localStorage.setItem(LS_BRAPI_TOKEN, data.brapiToken);
+  brapiUpdateSidebarStatus();
 }
 
 async function loadFromCloud() {
@@ -46,10 +57,12 @@ async function loadFromCloud() {
       const first = data.acoes[0];
       const isValid = first && ('lpa' in first || 'payout' in first || 'dy' in first);
       if (isValid) {
+        restoreBrapiToken(data);
         loadDataIntoTables(data);
         updateSaveTime(data.savedAt);
         setCloudStatus('ok', 'Sincronizado');
         try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+        brapiAutoUpdateAll();
         return;
       }
     }
@@ -62,9 +75,11 @@ async function loadFromCloud() {
       if (raw) {
         const cached = JSON.parse(raw);
         if (cached && cached.acoes && cached.fiis) {
+          restoreBrapiToken(cached);
           loadDataIntoTables(cached);
           updateSaveTime(cached.savedAt);
           setCloudStatus('error', 'Sem conexão — usando cache');
+          brapiAutoUpdateAll();
           return;
         }
       }
