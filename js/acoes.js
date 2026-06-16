@@ -10,15 +10,13 @@ function calcAcoes(preco, lpa, payout, cagr, dy, tempo) {
 }
 
 function addAcoesRow(data) {
-  const d   = data || { ticker:'', qty:'', pmedio:'', preco:'', lpa:'', payout:'', cagr:10, dy:8, tempo:5 };
+  const d   = data || { ticker:'', preco:'', lpa:'', payout:'', cagr:10, dy:8, tempo:5 };
   const rid = ++acoesRowId;
   const tbody = document.getElementById('acoes-tbody');
   const tr    = document.createElement('tr');
   tr.id           = 'acoes-row-' + rid;
   tr.dataset.order = rid;
 
-  const vQty    = fmtInput(d.qty);
-  const vPmedio = fmtInput(d.pmedio);
   const vPreco  = fmtInput(d.preco);
   const vLpa    = fmtInput(d.lpa);
   const vPayout = fmtInput(d.payout);
@@ -33,8 +31,6 @@ function addAcoesRow(data) {
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
       <button class="brapi-btn" onclick="fetchRowBrapi(${rid},'acoes')" title="Buscar Preço e LPA (brapi.dev)" tabindex="-1"><i class="fa-solid fa-rotate"></i></button>
     </div></td>
-    <td><input class="table-input" data-f="qty"    inputmode="numeric"  value="${vQty}"    placeholder="0"    oninput="numericInput(this)" style="width:52px"></td>
-    <td><input class="table-input" data-f="pmedio" inputmode="decimal" value="${vPmedio}" placeholder="0,00" oninput="numericInput(this)" style="width:88px"></td>
     <td><input class="table-input" data-f="preco"  inputmode="decimal" value="${vPreco}"  placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:88px"></td>
     <td><input class="table-input" data-f="lpa"    inputmode="decimal" value="${vLpa}"    placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
     <td><input class="table-input" data-f="payout" inputmode="decimal" value="${vPayout}" placeholder="%" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>

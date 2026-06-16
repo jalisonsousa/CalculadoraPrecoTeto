@@ -70,7 +70,7 @@ header {
 }
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
+  color: var(--on-accent);
   box-shadow: 0 3px 12px var(--accent-glow);
 }
 .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
@@ -311,7 +311,7 @@ header {
 .guide-step { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 13px 15px; }
 .step-num {
   background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff; border-radius: 50%;
+  color: var(--on-accent); border-radius: 50%;
   width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 700; flex-shrink: 0;
@@ -475,64 +475,109 @@ details[open] summary .chevron { transform: rotate(180deg); }
   main { padding-left: 16px; padding-right: 16px; }
 }
 
-/* ===== DASHBOARD CHART ===== */
-.dash-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-@media (max-width: 900px) {
-  .dash-grid { grid-template-columns: 1fr; }
-}
-
-.mchart-row {
+/* ===== SIMULADOR DE APORTE ===== */
+.sim-controls {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 0;
-  border-bottom: 1px solid var(--border);
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-.mchart-row:last-child { border-bottom: none; }
-.mchart-ticker {
-  font-size: 11px; font-weight: 700; color: var(--accent2);
-  width: 58px; flex-shrink: 0; text-align: right;
+.sim-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 5px;
 }
-.mchart-bars {
-  flex: 1; display: flex; align-items: center; height: 14px;
-}
-.mchart-neg-area {
-  flex: 1; display: flex; justify-content: flex-end; height: 100%;
-}
-.mchart-pos-area { flex: 1; height: 100%; }
-.mchart-center {
-  width: 2px; height: 18px;
-  background: var(--border2); flex-shrink: 0;
-}
-.mchart-fill {
-  height: 100%; border-radius: 2px;
-  transition: width 0.4s ease; min-width: 0;
-}
-.mchart-fill.good { background: var(--green); }
-.mchart-fill.warn { background: var(--orange); }
-.mchart-fill.bad  { background: var(--red); }
-.mchart-pct {
-  font-size: 11px; font-weight: 700;
-  width: 52px; text-align: right;
-  flex-shrink: 0; white-space: nowrap;
-}
-.mchart-pct.good { color: var(--green); }
-.mchart-pct.warn { color: var(--orange); }
-.mchart-pct.bad  { color: var(--red); }
+.sim-go-btn { height: 42px; align-self: flex-end; }
 
-/* ===== META RENDA ===== */
-.meta-progress-track {
-  height: 10px; background: var(--surface2);
-  border-radius: 10px; overflow: hidden;
+/* Segmented toggle (Distribuição) */
+.sim-seg {
+  display: inline-flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 3px;
+  gap: 3px;
 }
-.meta-progress-fill {
-  height: 100%; border-radius: 10px;
-  transition: width 0.5s ease;
-  background: linear-gradient(90deg, var(--accent), var(--green));
+.sim-seg-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.sim-seg-btn:hover:not(.active) { color: var(--text); }
+.sim-seg-btn.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: var(--on-accent);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.sim-group { margin-bottom: 14px; }
+.sim-group:last-child { margin-bottom: 0; }
+.sim-group-title {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 700; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 4px 2px 8px;
+}
+.sim-asset {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; margin-bottom: 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.sim-asset:hover { border-color: var(--border2); }
+.sim-asset.sel { border-color: var(--accent); background: var(--accent-glow); }
+.sim-check {
+  width: 17px; height: 17px;
+  accent-color: var(--accent);
+  cursor: pointer; flex-shrink: 0;
+}
+.sim-asset-tk {
+  font-weight: 700; color: var(--accent2);
+  font-size: 13px; letter-spacing: 0.4px;
+  width: 72px; flex-shrink: 0;
+}
+.sim-asset-meta {
+  flex: 1; display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 12px; color: var(--text2);
+}
+.sim-asset-meta b { color: var(--text); font-weight: 600; }
+
+@media (max-width: 639px) {
+  .sim-asset-meta { gap: 10px; font-size: 11px; }
+  .sim-asset-tk { width: 58px; font-size: 12px; }
+  .sim-go-btn { width: 100%; justify-content: center; }
+}
+
+/* ===== STICKY TICKER COLUMN (mobile) ===== */
+/* Mantém o ticker do FII/Ação fixo ao rolar a tabela na horizontal (estilo Investidor10) */
+@media (max-width: 768px) {
+  .calc-table th:first-child,
+  .calc-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: var(--bg2) !important;
+    box-shadow: 5px 0 8px -3px rgba(0,0,0,0.35);
+  }
+  .calc-table th:first-child {
+    z-index: 6;
+    background: var(--th-bg) !important;
+  }
+  .row-opp td:first-child {
+    box-shadow: inset 3px 0 0 var(--green), 5px 0 8px -3px rgba(0,0,0,0.35);
+  }
 }
 
 /* ===== RESPONSIVE: MOBILE (< 640px) ===== */

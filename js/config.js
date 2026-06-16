@@ -32,6 +32,7 @@ const JB_API_KEY = '$2a$10$k4/ONwopA2v/Zg7xxhdG2.GuKxho4qTJrlCNVGFriVsPaq5UTLs82
 const JB_URL     = `https://api.jsonbin.io/v3/b/${JB_BIN_ID}`;
 const LS_KEY     = 'precoteto_v2';
 const LS_THEME   = 'precoteto_theme';
+const LS_TAB     = 'precoteto_tab';
 
 const jbHeaders = {
   'Content-Type': 'application/json',

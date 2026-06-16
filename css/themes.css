@@ -1,18 +1,19 @@
-/* ===== DARK THEME ===== */
+/* ===== DARK THEME — graphite + teal ===== */
 :root[data-theme="dark"] {
-  --bg:            #111827;
-  --bg2:           #1a2332;
-  --bg3:           #1f2d40;
-  --surface:       rgba(255,255,255,0.04);
-  --surface2:      rgba(255,255,255,0.07);
-  --border:        rgba(99,179,237,0.16);
-  --border2:       rgba(99,179,237,0.32);
-  --text:          #e2e8f0;
-  --text2:         #94a3b8;
-  --text3:         #475569;
-  --accent:        #60a5fa;
-  --accent2:       #93c5fd;
-  --accent-glow:   rgba(96,165,250,0.12);
+  --bg:            #0e1015;
+  --bg2:           #181c22;
+  --bg3:           #20252d;
+  --surface:       rgba(255,255,255,0.035);
+  --surface2:      rgba(255,255,255,0.06);
+  --border:        rgba(255,255,255,0.085);
+  --border2:       rgba(45,212,191,0.30);
+  --text:          #e6e9ec;
+  --text2:         #98a2ad;
+  --text3:         #586270;
+  --accent:        #2dd4bf;
+  --accent2:       #5eead4;
+  --accent-glow:   rgba(45,212,191,0.12);
+  --on-accent:     #042b25;
   --gold:          #fbbf24;
   --green:         #4ade80;
   --orange:        #fb923c;
@@ -23,17 +24,17 @@
   --green-border:  rgba(74,222,128,0.25);
   --orange-border: rgba(251,146,60,0.25);
   --red-border:    rgba(248,113,113,0.25);
-  --header-bg:     #1a2332;
-  --tab-bar-bg:    rgba(17,24,39,0.97);
-  --scroll-track:  #1a2332;
-  --scroll-thumb:  #60a5fa;
-  --tooltip-bg:    #1e2d42;
-  --footer-border: rgba(99,179,237,0.1);
-  --footer-text:   #94a3b8;
-  --save-time:     #94a3b8;
-  --th-bg:         #1a2332;
-  --th-result-bg:  #152030;
-  --spinner-color: #475569;
+  --header-bg:     #13171c;
+  --tab-bar-bg:    rgba(14,16,21,0.97);
+  --scroll-track:  #181c22;
+  --scroll-thumb:  #2dd4bf;
+  --tooltip-bg:    #1b2027;
+  --footer-border: rgba(255,255,255,0.07);
+  --footer-text:   #98a2ad;
+  --save-time:     #98a2ad;
+  --th-bg:         #13171c;
+  --th-result-bg:  #0f1318;
+  --spinner-color: #586270;
 }
 
 /* ===== LIGHT THEME ===== */
@@ -51,6 +52,7 @@
   --accent:        #2563eb;
   --accent2:       #3b82f6;
   --accent-glow:   rgba(37,99,235,0.10);
+  --on-accent:     #ffffff;
   --gold:          #b45309;
   --green:         #16a34a;
   --orange:        #c2410c;

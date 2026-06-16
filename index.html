@@ -48,27 +48,6 @@
   </div>
 </div>
 
-<!-- ===== MODAL SIMULADOR DE APORTE ===== -->
-<div id="sim-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)closeSimulator()">
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.6)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <h3 style="font-size:16px;font-weight:700;color:var(--text)">
-        <i class="fa-solid fa-coins mr-2" style="color:var(--accent)"></i>Simulador de Aporte
-      </h3>
-      <button onclick="closeSimulator()" style="background:transparent;border:0;cursor:pointer;color:var(--text2);font-size:20px;line-height:1;padding:4px 8px" title="Fechar">×</button>
-    </div>
-    <p style="font-size:11px;color:var(--text2);margin-bottom:16px">Distribui o valor entre ativos <strong>abaixo do preço teto</strong>, priorizando os de maior margem de segurança.</p>
-    <input type="hidden" id="sim-type">
-    <div style="display:flex;gap:10px;margin-bottom:16px">
-      <input id="sim-valor" class="table-input" inputmode="decimal" placeholder="Valor a aportar (ex: 500,00)" style="flex:1;font-size:14px;padding:10px 14px" oninput="numericInput(this)" onkeydown="if(event.key==='Enter')runSimulator()">
-      <button class="action-btn btn-primary" onclick="runSimulator()">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Simular
-      </button>
-    </div>
-    <div id="sim-result"></div>
-  </div>
-</div>
-
 <!-- ===== SIDEBAR OVERLAY (mobile) ===== -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
@@ -99,15 +78,9 @@
     <button class="sidebar-nav-item" id="nav-fiis" onclick="switchTab('fiis')">
       <i class="fa-solid fa-city"></i> FIIs
     </button>
-    <div class="sidebar-section-label" style="margin-top:10px">Análise</div>
-    <button class="sidebar-nav-item" id="nav-proventos" onclick="switchTab('proventos')">
-      <i class="fa-solid fa-hand-holding-dollar"></i> Proventos FIIs
-    </button>
-    <button class="sidebar-nav-item" id="nav-dashboard" onclick="switchTab('dashboard')">
-      <i class="fa-solid fa-chart-bar"></i> Dashboard
-    </button>
-    <button class="sidebar-nav-item" id="nav-carteira" onclick="switchTab('carteira')">
-      <i class="fa-solid fa-wallet"></i> Carteira
+    <div class="sidebar-section-label" style="margin-top:10px">Ferramentas</div>
+    <button class="sidebar-nav-item" id="nav-simulador" onclick="switchTab('simulador')">
+      <i class="fa-solid fa-coins"></i> Simulador de Aporte
     </button>
   </nav>
 
@@ -224,8 +197,6 @@
                 <button class="del-btn" style="padding:3px 6px" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
               </div>
             </th>
-            <th style="min-width:58px">Qtd. <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Quantidade de ações</strong><br>Cotas que você possui. Usado na Carteira para calcular P&amp;L."></i></th>
-            <th style="min-width:96px">Preço Médio <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Médio de compra</strong><br>Custo médio das suas ações. Usado para calcular P&amp;L na Carteira."></i></th>
             <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual</strong><br>Cotação atual da ação. Investidor10 → busque a ação → preço no topo."></i></th>
             <th class="th-req" style="min-width:80px">LPA Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido ÷ nº de ações. Investidor10 → Ação → Indicadores → LPA."></i></th>
             <th class="th-req" style="min-width:80px">Payout % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos. Use média dos últimos 3–5 anos."></i></th>
@@ -251,7 +222,6 @@
     <div class="flex items-center gap-4 mb-6 flex-wrap">
       <button class="add-row-btn" onclick="addAcoesRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar Ação</button>
       <button id="brapi-all-acoes" class="action-btn btn-secondary" onclick="fetchAllBrapi('acoes')" style="padding:7px 14px;font-size:12px;gap:6px" title="Busca Preço e LPA de todas as ações via brapi.dev"><i class="fa-solid fa-rotate" style="margin-right:5px"></i>Atualizar todos</button>
-      <button class="action-btn btn-secondary" onclick="openSimulator('acoes')" style="padding:7px 14px;font-size:12px;gap:6px"><i class="fa-solid fa-coins"></i> Simular Aporte</button>
       <div class="flex gap-3 flex-wrap legend-wrap" style="font-size:12px;color:var(--text2)">
         <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
         <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--orange)"></span> Próximo do teto (0–14%)</span>
@@ -331,8 +301,6 @@
                 <button class="del-btn" style="padding:3px 6px" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
               </div>
             </th>
-            <th style="min-width:58px">Qtd. <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Quantidade de cotas</strong><br>Cotas que você possui. Usado no painel de Proventos e Carteira."></i></th>
-            <th style="min-width:96px">Preço Médio <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Médio de compra</strong><br>Custo médio das suas cotas. Usado para calcular P&amp;L na Carteira."></i></th>
             <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
             <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
             <th class="th-req" style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
@@ -357,7 +325,6 @@
     <div class="flex items-center gap-4 mb-6 flex-wrap">
       <button class="add-row-btn" onclick="addFiisRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar FII</button>
       <button id="brapi-all-fiis" class="action-btn btn-secondary" onclick="fetchAllBrapi('fiis')" style="padding:7px 14px;font-size:12px;gap:6px" title="Busca Preço, P/VP e Div.12M de todos os FIIs via brapi.dev"><i class="fa-solid fa-rotate" style="margin-right:5px"></i>Atualizar todos</button>
-      <button class="action-btn btn-secondary" onclick="openSimulator('fiis')" style="padding:7px 14px;font-size:12px;gap:6px"><i class="fa-solid fa-coins"></i> Simular Aporte</button>
       <div class="flex gap-3 flex-wrap legend-wrap" style="font-size:12px;color:var(--text2)">
         <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
         <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--orange)"></span> Próximo do teto (0–14%)</span>
@@ -366,68 +333,63 @@
     </div>
   </div>
 
-  <!-- ========================= PROVENTOS TAB ========================= -->
-  <div id="tab-proventos" class="tab-content animate-in">
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5" id="prov-stats"></div>
+  <!-- ========================= SIMULADOR TAB ========================= -->
+  <div id="tab-simulador" class="tab-content animate-in">
 
     <div class="card p-4 mb-4">
-      <div style="display:flex;align-items:center;margin-bottom:14px;gap:10px">
-        <h3 style="font-size:14px;font-weight:700;color:var(--text)">
-          <i class="fa-solid fa-bullseye" style="color:var(--green);margin-right:6px"></i>Meta de Renda Passiva Mensal
-        </h3>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <label style="font-size:12px;color:var(--text2);font-weight:600;flex-shrink:0">Meta mensal (R$):</label>
-        <input id="meta-renda-input" class="table-input" type="text" inputmode="decimal" placeholder="ex: 5.000,00" style="width:140px;font-size:13px;padding:7px 10px;text-align:left" oninput="numericInput(this);updateProventos()">
-      </div>
-      <div id="meta-renda-content"><p style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0">Digite sua meta mensal acima para ver o progresso.</p></div>
-    </div>
-
-    <div class="card p-4 mb-4">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-        <h3 style="font-size:14px;font-weight:700;color:var(--text)">
-          <i class="fa-solid fa-hand-holding-dollar mr-2" style="color:var(--accent)"></i>Dividendos Esperados por FII
-        </h3>
-        <button class="action-btn btn-secondary" onclick="updateProventos()" style="padding:5px 12px;font-size:11px;gap:5px">
-          <i class="fa-solid fa-rotate"></i> Atualizar
+      <div class="sim-controls">
+        <div style="flex:1;min-width:170px">
+          <label class="sim-label">Valor a aportar</label>
+          <input id="sim-valor" class="table-input" inputmode="decimal" placeholder="ex: 1.000,00" style="width:100%;font-size:15px;padding:10px 14px;text-align:left" oninput="numericInput(this)" onkeydown="if(event.key==='Enter')runSimulador()">
+        </div>
+        <div>
+          <label class="sim-label">Distribuição</label>
+          <div class="sim-seg" id="sim-weight">
+            <button type="button" class="sim-seg-btn active" data-mode="margem" onclick="simSetMode('margem')">Maior margem</button>
+            <button type="button" class="sim-seg-btn" data-mode="igual" onclick="simSetMode('igual')">Dividir igual</button>
+          </div>
+        </div>
+        <button class="action-btn btn-primary sim-go-btn" onclick="runSimulador()">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Simular
         </button>
       </div>
-      <p style="font-size:11px;color:var(--text2);margin-bottom:14px">
-        Baseado nos dados da aba <strong>FIIs</strong>. Preencha a coluna <strong>Qtd.</strong> com a quantidade de cotas que você possui para ver seus proventos esperados.
-      </p>
-      <div id="prov-table"></div>
     </div>
 
-  </div>
+    <div id="sim-result" style="margin-bottom:16px"></div>
 
-  <!-- ========================= CARTEIRA TAB ========================= -->
-  <div id="tab-carteira" class="tab-content animate-in">
-
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-      <h2 style="font-size:16px;font-weight:700;color:var(--text)">
-        <i class="fa-solid fa-wallet" style="color:var(--accent);margin-right:8px"></i>Carteira — Patrimônio &amp; P&amp;L
-      </h2>
-      <button class="action-btn btn-secondary" onclick="updateCarteira()" style="padding:5px 12px;font-size:11px;gap:5px">
-        <i class="fa-solid fa-rotate"></i> Atualizar
-      </button>
+    <div class="card p-4 mb-4">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <h3 style="font-size:14px;font-weight:700;color:var(--text)">
+          <i class="fa-solid fa-list-check mr-2" style="color:var(--accent)"></i>Selecione os ativos
+          <span id="sim-count" style="font-size:11px;color:var(--text3);font-weight:400;margin-left:4px"></span>
+        </h3>
+        <div style="display:flex;gap:8px">
+          <button class="action-btn btn-secondary" style="padding:5px 12px;font-size:11px" onclick="simSelectAll(true)">Selecionar todos</button>
+          <button class="action-btn btn-secondary" style="padding:5px 12px;font-size:11px" onclick="simSelectAll(false)">Limpar</button>
+        </div>
+      </div>
+      <div id="sim-asset-list"></div>
     </div>
-    <div id="carteira-content"></div>
 
-  </div>
-
-  <!-- ========================= DASHBOARD TAB ========================= -->
-  <div id="tab-dashboard" class="tab-content animate-in">
-
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-      <h2 style="font-size:16px;font-weight:700;color:var(--text)">
-        <i class="fa-solid fa-chart-bar" style="color:var(--accent);margin-right:8px"></i>Dashboard — Margens de Segurança
-      </h2>
-      <button class="action-btn btn-secondary" onclick="updateDashboard()" style="padding:5px 12px;font-size:11px;gap:5px">
-        <i class="fa-solid fa-rotate"></i> Atualizar
-      </button>
-    </div>
-    <div id="dashboard-content"></div>
+    <details class="card-accent p-4 cursor-pointer">
+      <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
+        <div class="logo-badge w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style="min-width:32px">
+          <i class="fa-solid fa-coins text-white" style="font-size:12px"></i>
+        </div>
+        Como funciona o Simulador de Aporte
+        <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
+      </summary>
+      <div class="mt-4">
+        <p style="font-size:13px;color:var(--text2);line-height:1.6">
+          Marque os ativos que <strong>você</strong> quer comprar, informe o valor do aporte e clique em <strong>Simular</strong>.
+          A simulação usa apenas os ativos selecionados (das abas Ações e FIIs) e calcula quantas cotas comprar de cada um.
+        </p>
+        <ul style="font-size:12px;color:var(--text2);line-height:1.9;margin-top:10px;padding-left:18px">
+          <li><strong style="color:var(--text)">Priorizar maior margem</strong> — distribui mais para os ativos mais descontados (abaixo do preço teto).</li>
+          <li><strong style="color:var(--text)">Dividir igualmente</strong> — reparte o valor por igual entre todos os selecionados.</li>
+        </ul>
+      </div>
+    </details>
 
   </div>
 
@@ -451,9 +413,6 @@
 <script src="js/cloud.js"></script>
 <script src="js/tooltip.js"></script>
 <script src="js/simulator.js"></script>
-<script src="js/proventos.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/carteira.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

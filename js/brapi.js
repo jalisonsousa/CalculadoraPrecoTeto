@@ -82,7 +82,7 @@ async function brapiQuote(ticker) {
 
 function brapiFlashPrice(el) {
   el.style.transition = 'background-color 0.25s ease';
-  el.style.backgroundColor = 'rgba(99,102,241,0.32)';
+  el.style.backgroundColor = 'rgba(45,212,191,0.30)';
   setTimeout(() => {
     el.style.backgroundColor = '';
     setTimeout(() => { el.style.transition = ''; }, 300);
@@ -174,5 +174,10 @@ async function brapiAutoUpdateAll() {
   setCloudStatus('loading', 'Atualizando preços...');
   await fetchAllBrapi('acoes');
   await fetchAllBrapi('fiis');
+  // Se o simulador estiver aberto, reflete os novos preços na lista e no plano
+  if (document.getElementById('tab-simulador')?.classList.contains('active')) {
+    renderSimulador();
+    runSimulador(true);
+  }
   setCloudStatus('ok', 'Sincronizado');
 }

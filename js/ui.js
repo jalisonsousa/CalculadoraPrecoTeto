@@ -52,10 +52,10 @@ function showToast(msg, warn) {
 }
 
 // ===== TABS =====
-const TAB_TITLES = { acoes: 'Ações', fiis: 'FIIs', proventos: 'Proventos FIIs', dashboard: 'Dashboard', carteira: 'Carteira' };
+const TAB_TITLES = { acoes: 'Ações', fiis: 'FIIs', simulador: 'Simulador de Aporte' };
 
 function switchTab(tab) {
-  ['acoes', 'fiis', 'proventos', 'dashboard', 'carteira'].forEach(t => {
+  ['acoes', 'fiis', 'simulador'].forEach(t => {
     const navEl = document.getElementById('nav-' + t);
     const tabEl = document.getElementById('tab-' + t);
     if (navEl) navEl.classList.toggle('active', t === tab);
@@ -63,9 +63,8 @@ function switchTab(tab) {
   });
   const title = document.getElementById('top-bar-title');
   if (title) title.textContent = TAB_TITLES[tab] || '';
-  if (tab === 'proventos') updateProventos();
-  if (tab === 'dashboard') updateDashboard();
-  if (tab === 'carteira')  updateCarteira();
+  if (tab === 'simulador') renderSimulador();
+  try { localStorage.setItem(LS_TAB, tab); } catch (e) {}
   closeSidebar();
 }
 
@@ -109,7 +108,7 @@ function loadDataIntoTables(data) {
   (data.fiis  || []).forEach(d => addFiisRow(d));
   updateAcoesStats();
   updateFiisStats();
-  const metaInput = document.getElementById('meta-renda-input');
-  if (metaInput && data.metaRenda) metaInput.value = data.metaRenda;
+  // Mantém a lista do simulador em sincronia se for a aba ativa
+  if (document.getElementById('tab-simulador')?.classList.contains('active')) renderSimulador();
 }
 

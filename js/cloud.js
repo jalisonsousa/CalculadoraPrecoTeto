@@ -3,8 +3,6 @@ function collectCurrentData() {
   document.querySelectorAll('#acoes-tbody tr').forEach(row => {
     acoes.push({
       ticker: row.querySelector('[data-f="ticker"]').value || '',
-      qty:    pi(row.querySelector('[data-f="qty"]')?.value)    || 0,
-      pmedio: pf(row.querySelector('[data-f="pmedio"]')?.value),
       preco:  pf(row.querySelector('[data-f="preco"]').value),
       lpa:    pf(row.querySelector('[data-f="lpa"]').value),
       payout: pf(row.querySelector('[data-f="payout"]').value),
@@ -17,8 +15,6 @@ function collectCurrentData() {
   document.querySelectorAll('#fiis-tbody tr').forEach(row => {
     fiis.push({
       ticker:   row.querySelector('[data-f="ticker"]').value || '',
-      qty:      pi(row.querySelector('[data-f="qty"]')?.value)    || 0,
-      pmedio:   pf(row.querySelector('[data-f="pmedio"]')?.value),
       pvp:      pf(row.querySelector('[data-f="pvp"]').value),
       preco:    pf(row.querySelector('[data-f="preco"]').value),
       div12m:   pf(row.querySelector('[data-f="div12m"]').value),
@@ -28,8 +24,7 @@ function collectCurrentData() {
     });
   });
   const brapiToken = brapiGetToken();
-  const metaRenda  = document.getElementById('meta-renda-input')?.value || '';
-  return { acoes, fiis, savedAt: new Date().toISOString(), ...(metaRenda && { metaRenda }), ...(brapiToken && { brapiToken }) };
+  return { acoes, fiis, savedAt: new Date().toISOString(), ...(brapiToken && { brapiToken }) };
 }
 
 function restoreBrapiToken(data) {
