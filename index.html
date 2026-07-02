@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora Preço Teto</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="img/icon.svg">
   <link rel="stylesheet" href="css/themes.css">
   <link rel="stylesheet" href="css/main.css">
@@ -17,30 +18,28 @@
 <div id="toast"><i class="fa-solid fa-floppy-disk toast-icon" id="toast-icon"></i><span id="toast-msg">Dados salvos!</span></div>
 
 <!-- ===== MODAL TOKEN BRAPI ===== -->
-<div id="brapi-token-modal" style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)brapiCloseTokenModal()">
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,0.7)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <h3 style="font-size:15px;font-weight:700;color:var(--text)">
-        <i class="fa-solid fa-key mr-2" style="color:var(--accent)"></i>Token brapi.dev
-      </h3>
-      <button onclick="brapiCloseTokenModal()" style="background:transparent;border:0;cursor:pointer;color:var(--text2);font-size:20px;line-height:1;padding:4px 8px">×</button>
+<div id="brapi-token-modal" class="modal-backdrop" onclick="if(event.target===this)brapiCloseTokenModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 class="modal-title"><i class="fa-solid fa-key"></i>Token brapi.dev</h3>
+      <button class="modal-close" onclick="brapiCloseTokenModal()" aria-label="Fechar">×</button>
     </div>
-    <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:12px">
-      Para buscar dados automaticamente, você precisa de um <strong style="color:var(--text)">token gratuito</strong> do brapi.dev.
+    <p class="modal-text">
+      Para buscar dados automaticamente, você precisa de um <strong>token gratuito</strong> do brapi.dev.
     </p>
-    <ol style="font-size:12px;color:var(--text2);padding-left:18px;line-height:2.1;margin-bottom:16px">
-      <li>Acesse <a href="https://brapi.dev" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">brapi.dev</a> e crie uma conta gratuita</li>
-      <li>No painel da conta, clique em <strong style="color:var(--text)">Tokens</strong> e copie seu token</li>
+    <ol class="modal-list">
+      <li>Acesse <a href="https://brapi.dev" target="_blank" rel="noopener">brapi.dev</a> e crie uma conta gratuita</li>
+      <li>No painel da conta, clique em <strong>Tokens</strong> e copie seu token</li>
       <li>Cole abaixo e salve</li>
     </ol>
-    <input id="brapi-token-input" class="table-input" placeholder="Cole seu token aqui..." style="width:100%;font-size:12px;padding:10px 14px;margin-bottom:14px;font-family:monospace;letter-spacing:0.03em" onkeydown="if(event.key==='Enter')brapiSaveToken()">
-    <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
-      <button class="action-btn btn-danger" id="brapi-remove-btn" onclick="brapiRemoveToken()" style="font-size:11px;padding:6px 12px;display:none">
+    <input id="brapi-token-input" class="table-input modal-input" placeholder="Cole seu token aqui..." onkeydown="if(event.key==='Enter')brapiSaveToken()">
+    <div class="modal-actions">
+      <button class="action-btn btn-danger" id="brapi-remove-btn" onclick="brapiRemoveToken()" style="display:none">
         <i class="fa-solid fa-trash"></i> Remover
       </button>
-      <div style="display:flex;gap:8px;margin-left:auto">
-        <button class="action-btn btn-secondary" onclick="brapiCloseTokenModal()" style="font-size:12px;padding:7px 14px">Cancelar</button>
-        <button class="action-btn btn-primary" onclick="brapiSaveToken()" style="font-size:12px;padding:7px 14px">
+      <div class="modal-actions-right">
+        <button class="action-btn btn-secondary" onclick="brapiCloseTokenModal()">Cancelar</button>
+        <button class="action-btn btn-primary" onclick="brapiSaveToken()">
           <i class="fa-solid fa-floppy-disk"></i> Salvar token
         </button>
       </div>
@@ -52,21 +51,14 @@
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- ===== SIDEBAR ===== -->
-<div class="sidebar" id="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="logo-badge" style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
-          <line x1="1" y1="3.5" x2="19" y2="3.5" stroke="white" stroke-width="1" stroke-dasharray="2.5,2" opacity="0.5"/>
-          <path d="M1,17 C5,16 9,13 13,9 C15,7 17,6 19,5.5 L19,17 Z" fill="rgba(255,255,255,0.2)"/>
-          <path d="M1,17 C5,16 9,13 13,9 C15,7 17,6 19,5.5" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-          <circle cx="19" cy="5.5" r="2" fill="#fbbf24"/>
-        </svg>
-      </div>
-      <div>
-        <div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.2">Preço Teto</div>
-        <div style="font-size:10px;color:var(--text2);margin-top:1px">Jalison</div>
-      </div>
+    <div class="logo-badge">
+      <img src="img/icon.svg" alt="Logo Preço Teto" width="36" height="36">
+    </div>
+    <div>
+      <div class="logo-name">Preço Teto</div>
+      <div class="logo-sub">Jalison</div>
     </div>
   </div>
 
@@ -85,265 +77,282 @@
   </nav>
 
   <div class="sidebar-bottom">
-    <a href="https://investidor10.com.br" target="_blank" class="sidebar-ext-link">
+    <a href="https://investidor10.com.br" target="_blank" rel="noopener" class="sidebar-ext-link">
       <i class="fa-solid fa-arrow-up-right-from-square"></i> Investidor10
     </a>
-    <a href="https://www.fundsexplorer.com.br" target="_blank" class="sidebar-ext-link">
+    <a href="https://www.fundsexplorer.com.br" target="_blank" rel="noopener" class="sidebar-ext-link">
       <i class="fa-solid fa-arrow-up-right-from-square"></i> Funds Explorer
     </a>
-    <a href="https://www.youtube.com/@ACaraDaRiqueza" target="_blank" class="sidebar-ext-link">
+    <a href="https://www.youtube.com/@ACaraDaRiqueza" target="_blank" rel="noopener" class="sidebar-ext-link">
       <i class="fa-brands fa-youtube"></i> Canal
     </a>
-    <div style="height:1px;background:var(--border);margin:6px 4px"></div>
-    <button id="brapi-sidebar-status" class="action-btn btn-secondary" style="width:100%;justify-content:flex-start;padding:7px 12px;font-size:12px;border-radius:8px;gap:7px" onclick="brapiOpenTokenModal()">
+    <div class="sidebar-sep"></div>
+    <button id="brapi-sidebar-status" class="action-btn btn-secondary" onclick="brapiOpenTokenModal()">
       <i class="fa-solid fa-key" style="color:var(--orange)"></i> brapi.dev <span style="color:var(--orange);font-size:10px">● sem token</span>
     </button>
-    <div style="height:1px;background:var(--border);margin:6px 4px"></div>
-    <button class="theme-toggle" style="width:100%;justify-content:flex-start;border-radius:8px" onclick="toggleTheme()">
+    <button class="theme-toggle" onclick="toggleTheme()">
       <i id="theme-icon" class="fa-solid fa-moon"></i>
       <span id="theme-label">Escuro</span>
     </button>
-    <button class="action-btn btn-secondary" style="width:100%;justify-content:flex-start;padding:7px 12px;font-size:12px;border-radius:8px" onclick="exportData()">
+    <button class="sidebar-tool-btn" onclick="exportData()">
       <i class="fa-solid fa-download"></i> Exportar
     </button>
   </div>
-</div>
+</aside>
 
 <!-- ===== APP WRAPPER ===== -->
 <div class="app-wrapper">
 
   <!-- ===== TOP BAR ===== -->
-  <div class="top-bar">
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="hamburger" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
       <span class="top-bar-title" id="top-bar-title">Ações</span>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
+    <div class="top-bar-right">
       <button id="sticky-save-btn" class="save-sync-btn" onclick="saveData()">
         <i id="sync-icon" class="fa-solid fa-cloud-arrow-up"></i>
         <span id="sync-label">...</span>
       </button>
       <span class="save-time" id="sticky-save-time"></span>
     </div>
-  </div>
+  </header>
 
-  <main style="flex:1;width:100%;padding:20px 28px">
+  <main class="main-content">
 
   <!-- ========================= AÇÕES TAB ========================= -->
   <div id="tab-acoes" class="tab-content active animate-in">
 
-    <details class="card-accent p-4 mb-5 cursor-pointer">
-      <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
-        <div class="logo-badge w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style="min-width:32px">
-          <i class="fa-solid fa-calculator text-white" style="font-size:12px"></i>
-        </div>
-        Como funciona o Preço Teto de Ações
-        <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
-      </summary>
-      <div class="mt-4">
-        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">
-          O preço teto é o valor máximo que você pode pagar por uma ação mantendo a rentabilidade desejada.
-          A metodologia projeta o lucro futuro e calcula quanto pagar hoje para receber o dividendo desejado no futuro.
-        </p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">① LPA Futuro</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">LPA × (1 + CAGR)^Tempo</code>
-            <p style="font-size:11px;color:var(--text2)">Lucro futuro projetado</p>
-          </div>
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">② Dividendo Futuro</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">LPA Futuro × Payout</code>
-            <p style="font-size:11px;color:var(--text2)">Dividendo esperado</p>
-          </div>
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">③ Preço Teto</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">Div. Futuro ÷ DY Des.</code>
-            <p style="font-size:11px;color:var(--text2)">Preço máximo a pagar</p>
-          </div>
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">④ Margem Seg.</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">(P.Teto-P.Atual)÷P.Atual</code>
-            <p style="font-size:11px;color:var(--text2)">Desconto em relação ao teto</p>
-          </div>
+    <div id="acoes-stats" class="stats-grid"></div>
+
+    <section class="card table-card">
+      <div class="table-toolbar">
+        <h2 class="table-title"><i class="fa-solid fa-building-columns"></i> Ativos monitorados</h2>
+        <div class="table-toolbar-actions">
+          <button id="brapi-all-acoes" class="action-btn btn-secondary" onclick="fetchAllBrapi('acoes')" title="Busca Preço e LPA de todas as ações via brapi.dev"><i class="fa-solid fa-rotate"></i> Atualizar todos</button>
+          <button class="action-btn btn-primary" onclick="addAcoesRow()"><i class="fa-solid fa-plus"></i> Adicionar Ação</button>
         </div>
       </div>
-    </details>
-
-    <details class="card p-4 mb-5 cursor-pointer">
-      <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
-        <i class="fa-solid fa-map-pin"></i> Onde encontrar cada dado no Investidor10
-        <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
-      </summary>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-        <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → ação → preço no topo da página</p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">LPA Atual</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">LPA</span></p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Payout (%)</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Indicadores</span> → campo <span class="badge">Payout</span> — use média 3–5 anos</p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">CAGR Lucro(%)</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Resultados</span> → crescimento do LPA. Fórmula: <code style="color:var(--gold)">(LPA_hoje/LPA_5a)^(1/5)−1</code></p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">DY Desejado (%)</div><p style="font-size:12px;color:var(--text2)">Sua meta de rentabilidade. Padrão: <span class="badge">8%</span></p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">6</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Tempo (anos)</div><p style="font-size:12px;color:var(--text2)">Horizonte de projeção. Padrão: <span class="badge">5 anos</span></p></div></div>
+      <div class="table-scroll">
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th style="min-width:130px">
+                <div class="th-sort-group">
+                  <button id="acoes-ticker-sort-btn" class="th-sort-btn" onclick="sortByTicker('acoes-tbody')" title="Ordenar A–Z / Z–A"><i class="fa-solid fa-tag mr-1"></i><span id="acoes-ticker-sort-label">Ação</span></button>
+                  <button class="del-btn" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
+                </div>
+              </th>
+              <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual</strong><br>Cotação atual da ação. Investidor10 → busque a ação → preço no topo."></i></th>
+              <th class="th-req" style="min-width:80px">LPA Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido ÷ nº de ações. Investidor10 → Ação → Indicadores → LPA."></i></th>
+              <th class="th-req" style="min-width:80px">Payout % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos. Use média dos últimos 3–5 anos."></i></th>
+              <th class="th-req" style="min-width:72px">CAGR Lu % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>CAGR de Lucros</strong><br>Taxa de crescimento anual do lucro. Use média histórica 3–5 anos."></i></th>
+              <th class="th-req" style="min-width:72px">DY Des. % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividend Yield Desejado</strong><br>Rentabilidade mínima desejada. Padrão: 8% a.a."></i></th>
+              <th class="th-req" style="min-width:60px">Tempo <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Tempo de Projeção (anos)</strong><br>Anos à frente para projetar o lucro. Padrão: 5 anos."></i></th>
+              <th class="result-col" style="min-width:95px">LPA Futuro</th>
+              <th class="result-col" style="min-width:100px">Div. Futuro</th>
+              <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
+              <th class="result-col" style="min-width:115px">
+                <div class="th-sort-group center">
+                  <button id="acoes-sort-btn" class="th-sort-btn" onclick="sortByMargem('acoes-tbody')" title="Ordenar por Margem Seg.">Margem Seg.</button>
+                  <button class="del-btn" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
+                </div>
+              </th>
+              <th style="width:38px"></th>
+            </tr>
+          </thead>
+          <tbody id="acoes-tbody"></tbody>
+        </table>
       </div>
-    </details>
-
-    <div id="acoes-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></div>
-
-    <div class="table-scroll mb-4">
-      <table class="calc-table">
-        <thead>
-          <tr>
-            <th style="min-width:130px">
-              <div style="display:flex;align-items:center;gap:4px">
-                <button id="acoes-ticker-sort-btn" style="background:transparent;border:0;color:var(--accent2);font-weight:700;cursor:pointer;font-size:10.5px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap" onclick="sortByTicker('acoes-tbody')" title="Ordenar A–Z / Z–A"><i class="fa-solid fa-tag mr-1"></i><span id="acoes-ticker-sort-label">Ação</span></button>
-                <button class="del-btn" style="padding:3px 6px" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
-              </div>
-            </th>
-            <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual</strong><br>Cotação atual da ação. Investidor10 → busque a ação → preço no topo."></i></th>
-            <th class="th-req" style="min-width:80px">LPA Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>LPA — Lucro Por Ação</strong><br>Lucro líquido ÷ nº de ações. Investidor10 → Ação → Indicadores → LPA."></i></th>
-            <th class="th-req" style="min-width:80px">Payout % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Payout — Média histórica</strong><br>% do lucro distribuído como dividendos. Use média dos últimos 3–5 anos."></i></th>
-            <th class="th-req" style="min-width:72px">CAGR Lu % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>CAGR de Lucros</strong><br>Taxa de crescimento anual do lucro. Use média histórica 3–5 anos."></i></th>
-            <th class="th-req" style="min-width:72px">DY Des. % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividend Yield Desejado</strong><br>Rentabilidade mínima desejada. Padrão: 8% a.a."></i></th>
-            <th class="th-req" style="min-width:60px">Tempo <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Tempo de Projeção (anos)</strong><br>Anos à frente para projetar o lucro. Padrão: 5 anos."></i></th>
-            <th class="result-col" style="min-width:95px"><span style="color:var(--accent2)">LPA Futuro</span></th>
-            <th class="result-col" style="min-width:100px"><span style="color:var(--accent2)">Div. Futuro</span></th>
-            <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
-            <th class="result-col" style="min-width:115px">
-              <div style="display:flex;align-items:center;justify-content:center;gap:6px">
-                <button id="acoes-sort-btn" style="background:transparent;border:0;color:var(--accent2);font-weight:700;cursor:pointer" onclick="sortByMargem('acoes-tbody')" title="Ordenar por Margem Seg.">Margem Seg.</button>
-                <button class="del-btn" style="padding:4px 7px;margin-left:4px" onclick="clearSort('acoes-tbody')" title="Desfazer ordenação">×</button>
-              </div>
-            </th>
-            <th style="width:38px"></th>
-          </tr>
-        </thead>
-        <tbody id="acoes-tbody"></tbody>
-      </table>
-    </div>
-
-    <div class="flex items-center gap-4 mb-6 flex-wrap">
-      <button class="add-row-btn" onclick="addAcoesRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar Ação</button>
-      <button id="brapi-all-acoes" class="action-btn btn-secondary" onclick="fetchAllBrapi('acoes')" style="padding:7px 14px;font-size:12px;gap:6px" title="Busca Preço e LPA de todas as ações via brapi.dev"><i class="fa-solid fa-rotate" style="margin-right:5px"></i>Atualizar todos</button>
-      <div class="flex gap-3 flex-wrap legend-wrap" style="font-size:12px;color:var(--text2)">
-        <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
-        <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--orange)"></span> Próximo do teto (0–14%)</span>
-        <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--red)"></span> Acima do teto (caro)</span>
+      <div class="table-foot">
+        <div class="legend-wrap">
+          <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span> Oportunidade (≥15%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span> Próximo do teto (0–14%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span> Acima do teto (caro)</span>
+        </div>
       </div>
+    </section>
+
+    <div class="help-grid">
+      <details class="card-accent info-panel">
+        <summary>
+          <span class="info-panel-icon"><i class="fa-solid fa-calculator"></i></span>
+          Como funciona o Preço Teto de Ações
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </summary>
+        <div class="info-panel-body">
+          <p>
+            O preço teto é o valor máximo que você pode pagar por uma ação mantendo a rentabilidade desejada.
+            A metodologia projeta o lucro futuro e calcula quanto pagar hoje para receber o dividendo desejado no futuro.
+          </p>
+          <div class="formula-grid">
+            <div class="guide-step">
+              <div class="guide-title">1. LPA Futuro</div>
+              <code>LPA × (1 + CAGR)^Tempo</code>
+              <p class="guide-text">Lucro futuro projetado</p>
+            </div>
+            <div class="guide-step">
+              <div class="guide-title">2. Dividendo Futuro</div>
+              <code>LPA Futuro × Payout</code>
+              <p class="guide-text">Dividendo esperado</p>
+            </div>
+            <div class="guide-step">
+              <div class="guide-title">3. Preço Teto</div>
+              <code>Div. Futuro ÷ DY Desejado</code>
+              <p class="guide-text">Preço máximo a pagar</p>
+            </div>
+            <div class="guide-step">
+              <div class="guide-title">4. Margem de Segurança</div>
+              <code>(P.Teto − P.Atual) ÷ P.Atual</code>
+              <p class="guide-text">Desconto em relação ao teto</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="card info-panel">
+        <summary>
+          <span class="info-panel-icon"><i class="fa-solid fa-map-pin"></i></span>
+          Onde encontrar cada dado no Investidor10
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </summary>
+        <div class="info-panel-body">
+          <div class="guide-grid">
+            <div class="guide-step with-num"><div class="step-num">1</div><div><div class="guide-title">Preço Atual</div><p class="guide-text">Investidor10 → ação → preço no topo da página</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">2</div><div><div class="guide-title">LPA Atual</div><p class="guide-text">Aba <span class="badge">Indicadores</span> → campo <span class="badge">LPA</span></p></div></div>
+            <div class="guide-step with-num"><div class="step-num">3</div><div><div class="guide-title">Payout (%)</div><p class="guide-text">Aba <span class="badge">Indicadores</span> → campo <span class="badge">Payout</span> — use média 3–5 anos</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">4</div><div><div class="guide-title">CAGR Lucro (%)</div><p class="guide-text">Aba <span class="badge">Resultados</span> → crescimento do LPA nos últimos 5 anos</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">5</div><div><div class="guide-title">DY Desejado (%)</div><p class="guide-text">Sua meta de rentabilidade. Padrão: <span class="badge">8%</span></p></div></div>
+            <div class="guide-step with-num"><div class="step-num">6</div><div><div class="guide-title">Tempo (anos)</div><p class="guide-text">Horizonte de projeção. Padrão: <span class="badge">5 anos</span></p></div></div>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 
   <!-- ========================= FIIs TAB ========================= -->
   <div id="tab-fiis" class="tab-content animate-in">
 
-    <details class="card-accent p-4 mb-5 cursor-pointer">
-      <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
-        <div class="logo-badge w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style="min-width:32px">
-          <i class="fa-solid fa-building text-white" style="font-size:12px"></i>
-        </div>
-        Como funciona o Preço Teto de FIIs
-        <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
-      </summary>
-      <div class="mt-4">
-        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">
-          Para FIIs, o preço teto compara com o Tesouro IPCA+.
-          A rentabilidade desejada é: proteção inflacionária do FII + taxa IPCA+ + prêmio de risco.
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">Taxa Desejada</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">IPCA + IPCA+ + Prêmio</code>
-            <p style="font-size:11px;color:var(--text2)">Rentabilidade total desejada</p>
-          </div>
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">Preço Teto</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">Dividendo 12M ÷ Taxa</code>
-            <p style="font-size:11px;color:var(--text2)">Quanto você pode pagar pelo FII</p>
-          </div>
-          <div class="guide-step">
-            <div style="font-size:11px;font-weight:700;margin-bottom:4px;color:var(--accent)">Margem de Segurança</div>
-            <code style="font-size:11px;color:var(--gold);display:block;margin-bottom:3px">(P.Teto − P.Atual) ÷ P.Atual</code>
-            <p style="font-size:11px;color:var(--text2)">Desconto em relação ao preço teto</p>
-          </div>
-        </div>
-        <div class="mt-3 p-3 rounded-xl card">
-          <p style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:7px"><i class="fa-solid fa-lightbulb mr-1"></i> Como definir o IPCA do FII:</p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2" style="font-size:12px">
-            <div class="flex items-start gap-2"><span class="badge badge-green mt-0.5">IPCA = 0%</span><span style="color:var(--text2)"><strong style="color:var(--green)">Tijolo</strong> — valorização do imóvel cobre inflação</span></div>
-            <div class="flex items-start gap-2"><span class="badge mt-0.5" style="background:rgba(251,191,36,0.1);color:var(--gold);border-color:rgba(251,191,36,0.3);">IPCA = 5%</span><span style="color:var(--text2)"><strong style="color:var(--gold)">Papel</strong> — CRIs/CRAs indexados ao IPCA</span></div>
-            <div class="flex items-start gap-2"><span class="badge badge-orange mt-0.5">IPCA = 2,5%</span><span style="color:var(--text2)"><strong style="color:var(--orange)">Híbrido</strong> — proporcional à carteira</span></div>
-          </div>
+    <div id="fiis-stats" class="stats-grid"></div>
+
+    <section class="card table-card">
+      <div class="table-toolbar">
+        <h2 class="table-title"><i class="fa-solid fa-city"></i> Fundos monitorados</h2>
+        <div class="table-toolbar-actions">
+          <button id="brapi-all-fiis" class="action-btn btn-secondary" onclick="fetchAllBrapi('fiis')" title="Busca Preço, P/VP e Div.12M de todos os FIIs via brapi.dev"><i class="fa-solid fa-rotate"></i> Atualizar todos</button>
+          <button class="action-btn btn-primary" onclick="addFiisRow()"><i class="fa-solid fa-plus"></i> Adicionar FII</button>
         </div>
       </div>
-    </details>
-
-    <details class="card p-4 mb-5 cursor-pointer">
-      <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
-        <i class="fa-solid fa-map-pin"></i> Onde encontrar cada dado no Investidor10
-        <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
-      </summary>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-        <div class="guide-step flex items-start gap-3"><div class="step-num">1</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Preço Atual</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → preço no topo da página</p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">2</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">P/VP</div><p style="font-size:12px;color:var(--text2)">Investidor10 → FII → Indicadores → P/VP</p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">3</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Dividendo 12M</div><p style="font-size:12px;color:var(--text2)">Aba <span class="badge">Proventos</span> → soma dos últimos 12 meses</p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">4</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">IPCA do FII (%)</div><p style="font-size:12px;color:var(--text2)"><span class="badge badge-green">Tijolo=0%</span> <span class="badge" style="background:rgba(251,191,36,0.1);color:var(--gold);">Papel=5%</span> <span class="badge badge-orange">Híbrido=2,5%</span></p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">5</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">IPCA+ (%)</div><p style="font-size:12px;color:var(--text2)">Taxa Tesouro IPCA+ longo prazo. Padrão atual: ~7%</p></div></div>
-        <div class="guide-step flex items-start gap-3"><div class="step-num">6</div><div><div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px">Prêmio (%)</div><p style="font-size:12px;color:var(--text2)">Risco extra vs renda fixa. <span class="badge">1–3%</span> conforme solidez do FII</p></div></div>
+      <div class="table-scroll">
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th style="min-width:130px">
+                <div class="th-sort-group">
+                  <button id="fiis-ticker-sort-btn" class="th-sort-btn" onclick="sortByTicker('fiis-tbody')" title="Ordenar A–Z / Z–A"><i class="fa-solid fa-building-columns mr-1"></i><span id="fiis-ticker-sort-label">FII</span></button>
+                  <button class="del-btn" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
+                </div>
+              </th>
+              <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
+              <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
+              <th class="th-req" style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
+              <th class="th-req" style="min-width:68px">IPCA % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>IPCA do FII</strong><br>Tijolo: 0% · Papel: ~5% · Híbrido: ~2,5%"></i></th>
+              <th class="th-req" style="min-width:68px">IPCA+ % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Tesouro IPCA+ longo prazo. Padrão atual: ~7%"></i></th>
+              <th class="th-req" style="min-width:68px">Prêmio % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Prêmio de Risco</strong><br>FIIs grandes: 1–2% · Médios: 2–3% · Menores: 3–4%"></i></th>
+              <th class="result-col" style="min-width:70px">DY Total</th>
+              <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
+              <th class="result-col" style="min-width:115px">
+                <div class="th-sort-group center">
+                  <button id="fiis-sort-btn" class="th-sort-btn" onclick="sortByMargem('fiis-tbody')" title="Ordenar por Margem Seg.">Margem Seg.</button>
+                  <button class="del-btn" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
+                </div>
+              </th>
+              <th style="width:38px"></th>
+            </tr>
+          </thead>
+          <tbody id="fiis-tbody"></tbody>
+        </table>
       </div>
-    </details>
-
-    <div id="fiis-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></div>
-
-    <div class="table-scroll mb-4">
-      <table class="calc-table">
-        <thead>
-          <tr>
-            <th style="min-width:130px">
-              <div style="display:flex;align-items:center;gap:4px">
-                <button id="fiis-ticker-sort-btn" style="background:transparent;border:0;color:var(--accent2);font-weight:700;cursor:pointer;font-size:10.5px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap" onclick="sortByTicker('fiis-tbody')" title="Ordenar A–Z / Z–A"><i class="fa-solid fa-building-columns mr-1"></i><span id="fiis-ticker-sort-label">FII</span></button>
-                <button class="del-btn" style="padding:3px 6px" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
-              </div>
-            </th>
-            <th style="min-width:72px">P/VP <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço / Valor Patrimonial</strong><br>Abaixo de 1 = negociado com desconto. Investidor10 → FII → Indicadores."></i></th>
-            <th class="th-req" style="min-width:96px">Preço Atual <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Preço Atual da Cota</strong><br>Cotação atual na B3. Investidor10 → busque o FII."></i></th>
-            <th class="th-req" style="min-width:88px">Div. 12M (R$) <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Dividendos últimos 12 meses</strong><br>Soma de proventos pagos por cota. Investidor10 → Proventos."></i></th>
-            <th class="th-req" style="min-width:68px">IPCA % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>IPCA do FII</strong><br>Tijolo: 0% · Papel: ~5% · Híbrido: ~2,5%"></i></th>
-            <th class="th-req" style="min-width:68px">IPCA+ % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Taxa IPCA+ de Referência</strong><br>Tesouro IPCA+ longo prazo. Padrão atual: ~7%"></i></th>
-            <th class="th-req" style="min-width:68px">Prêmio % <i class="fa-solid fa-circle-info tip-icon" data-tip="<strong>Prêmio de Risco</strong><br>FIIs grandes: 1–2% · Médios: 2–3% · Menores: 3–4%"></i></th>
-            <th class="result-col" style="min-width:70px"><span style="color:var(--text2);font-size:10px">DY Total</span></th>
-            <th class="result-col" style="min-width:108px"><span style="color:var(--gold)"><i class="fa-solid fa-bullseye mr-1"></i>P. Teto</span></th>
-            <th class="result-col" style="min-width:115px">
-              <div style="display:flex;align-items:center;justify-content:center;gap:6px">
-                <button id="fiis-sort-btn" style="background:transparent;border:0;color:var(--accent2);font-weight:700;cursor:pointer" onclick="sortByMargem('fiis-tbody')" title="Ordenar por Margem Seg.">Margem Seg.</button>
-                <button class="del-btn" style="padding:4px 7px;margin-left:4px" onclick="clearSort('fiis-tbody')" title="Desfazer ordenação">×</button>
-              </div>
-            </th>
-            <th style="width:38px"></th>
-          </tr>
-        </thead>
-        <tbody id="fiis-tbody"></tbody>
-      </table>
-    </div>
-
-    <div class="flex items-center gap-4 mb-6 flex-wrap">
-      <button class="add-row-btn" onclick="addFiisRow()"><i class="fa-solid fa-plus mr-1"></i> Adicionar FII</button>
-      <button id="brapi-all-fiis" class="action-btn btn-secondary" onclick="fetchAllBrapi('fiis')" style="padding:7px 14px;font-size:12px;gap:6px" title="Busca Preço, P/VP e Div.12M de todos os FIIs via brapi.dev"><i class="fa-solid fa-rotate" style="margin-right:5px"></i>Atualizar todos</button>
-      <div class="flex gap-3 flex-wrap legend-wrap" style="font-size:12px;color:var(--text2)">
-        <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--green)"></span> Oportunidade (≥15%)</span>
-        <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--orange)"></span> Próximo do teto (0–14%)</span>
-        <span class="flex items-center gap-1.5"><span style="width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--red)"></span> Acima do teto (caro)</span>
+      <div class="table-foot">
+        <div class="legend-wrap">
+          <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span> Oportunidade (≥15%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span> Próximo do teto (0–14%)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span> Acima do teto (caro)</span>
+        </div>
       </div>
+    </section>
+
+    <div class="help-grid">
+      <details class="card-accent info-panel">
+        <summary>
+          <span class="info-panel-icon"><i class="fa-solid fa-building"></i></span>
+          Como funciona o Preço Teto de FIIs
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </summary>
+        <div class="info-panel-body">
+          <p>
+            Para FIIs, o preço teto compara com o Tesouro IPCA+.
+            A rentabilidade desejada é: proteção inflacionária do FII + taxa IPCA+ + prêmio de risco.
+          </p>
+          <div class="formula-grid">
+            <div class="guide-step">
+              <div class="guide-title">Taxa Desejada</div>
+              <code>IPCA + IPCA+ + Prêmio</code>
+              <p class="guide-text">Rentabilidade total desejada</p>
+            </div>
+            <div class="guide-step">
+              <div class="guide-title">Preço Teto</div>
+              <code>Dividendo 12M ÷ Taxa</code>
+              <p class="guide-text">Quanto você pode pagar pelo FII</p>
+            </div>
+            <div class="guide-step">
+              <div class="guide-title">Margem de Segurança</div>
+              <code>(P.Teto − P.Atual) ÷ P.Atual</code>
+              <p class="guide-text">Desconto em relação ao preço teto</p>
+            </div>
+          </div>
+          <div class="info-note">
+            <p class="info-note-title"><i class="fa-solid fa-lightbulb mr-1" style="color:var(--gold)"></i> Como definir o IPCA do FII:</p>
+            <div class="info-note-grid">
+              <div><span class="badge badge-green">IPCA = 0%</span><span><strong style="color:var(--green)">Tijolo</strong> — valorização do imóvel cobre inflação</span></div>
+              <div><span class="badge badge-gold">IPCA = 5%</span><span><strong style="color:var(--gold)">Papel</strong> — CRIs/CRAs indexados ao IPCA</span></div>
+              <div><span class="badge badge-orange">IPCA = 2,5%</span><span><strong style="color:var(--orange)">Híbrido</strong> — proporcional à carteira</span></div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="card info-panel">
+        <summary>
+          <span class="info-panel-icon"><i class="fa-solid fa-map-pin"></i></span>
+          Onde encontrar cada dado no Investidor10
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </summary>
+        <div class="info-panel-body">
+          <div class="guide-grid">
+            <div class="guide-step with-num"><div class="step-num">1</div><div><div class="guide-title">Preço Atual</div><p class="guide-text">Investidor10 → FII → preço no topo da página</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">2</div><div><div class="guide-title">P/VP</div><p class="guide-text">Investidor10 → FII → Indicadores → P/VP</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">3</div><div><div class="guide-title">Dividendo 12M</div><p class="guide-text">Aba <span class="badge">Proventos</span> → soma dos últimos 12 meses</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">4</div><div><div class="guide-title">IPCA do FII (%)</div><p class="guide-text"><span class="badge badge-green">Tijolo = 0%</span> <span class="badge badge-gold">Papel = 5%</span> <span class="badge badge-orange">Híbrido = 2,5%</span></p></div></div>
+            <div class="guide-step with-num"><div class="step-num">5</div><div><div class="guide-title">IPCA+ (%)</div><p class="guide-text">Taxa Tesouro IPCA+ longo prazo. Padrão atual: ~7%</p></div></div>
+            <div class="guide-step with-num"><div class="step-num">6</div><div><div class="guide-title">Prêmio (%)</div><p class="guide-text">Risco extra vs renda fixa. <span class="badge">1–3%</span> conforme solidez do FII</p></div></div>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 
   <!-- ========================= SIMULADOR TAB ========================= -->
   <div id="tab-simulador" class="tab-content animate-in">
 
-    <div class="card p-4 mb-4">
+    <div class="card sim-panel mb-4">
       <div class="sim-controls">
-        <div style="flex:1;min-width:170px">
-          <label class="sim-label">Valor a aportar</label>
-          <input id="sim-valor" class="table-input" inputmode="decimal" placeholder="ex: 1.000,00" style="width:100%;font-size:15px;padding:10px 14px;text-align:left" oninput="numericInput(this)" onkeydown="if(event.key==='Enter')runSimulador()">
+        <div class="sim-field">
+          <label class="sim-label" for="sim-valor">Valor a aportar</label>
+          <input id="sim-valor" class="table-input sim-valor-input" inputmode="decimal" placeholder="ex: 1.000,00" oninput="numericInput(this)" onkeydown="if(event.key==='Enter')runSimulador()">
         </div>
         <div>
-          <label class="sim-label">Distribuição</label>
+          <span class="sim-label">Distribuição</span>
           <div class="sim-seg" id="sim-weight">
             <button type="button" class="sim-seg-btn active" data-mode="margem" onclick="simSetMode('margem')">Maior margem</button>
             <button type="button" class="sim-seg-btn" data-mode="igual" onclick="simSetMode('igual')">Dividir igual</button>
@@ -355,36 +364,34 @@
       </div>
     </div>
 
-    <div id="sim-result" style="margin-bottom:16px"></div>
+    <div id="sim-result" class="mb-4"></div>
 
-    <div class="card p-4 mb-4">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-        <h3 style="font-size:14px;font-weight:700;color:var(--text)">
-          <i class="fa-solid fa-list-check mr-2" style="color:var(--accent)"></i>Selecione os ativos
-          <span id="sim-count" style="font-size:11px;color:var(--text3);font-weight:400;margin-left:4px"></span>
+    <div class="card sim-panel mb-4">
+      <div class="sim-list-head">
+        <h3 class="sim-list-title">
+          <i class="fa-solid fa-list-check"></i>Selecione os ativos
+          <span id="sim-count" class="sim-list-count"></span>
         </h3>
-        <div style="display:flex;gap:8px">
-          <button class="action-btn btn-secondary" style="padding:5px 12px;font-size:11px" onclick="simSelectAll(true)">Selecionar todos</button>
-          <button class="action-btn btn-secondary" style="padding:5px 12px;font-size:11px" onclick="simSelectAll(false)">Limpar</button>
+        <div class="sim-list-tools">
+          <button class="action-btn btn-secondary" onclick="simSelectAll(true)">Selecionar todos</button>
+          <button class="action-btn btn-secondary" onclick="simSelectAll(false)">Limpar</button>
         </div>
       </div>
       <div id="sim-asset-list"></div>
     </div>
 
-    <details class="card-accent p-4 cursor-pointer">
-      <summary style="font-size:13px;font-weight:600;color:var(--accent2);display:flex;align-items:center;gap:8px;list-style:none">
-        <div class="logo-badge w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style="min-width:32px">
-          <i class="fa-solid fa-coins text-white" style="font-size:12px"></i>
-        </div>
+    <details class="card-accent info-panel">
+      <summary>
+        <span class="info-panel-icon"><i class="fa-solid fa-coins"></i></span>
         Como funciona o Simulador de Aporte
-        <i class="fa-solid fa-chevron-down chevron ml-auto" style="font-size:10px;opacity:0.5"></i>
+        <i class="fa-solid fa-chevron-down chevron"></i>
       </summary>
-      <div class="mt-4">
-        <p style="font-size:13px;color:var(--text2);line-height:1.6">
+      <div class="info-panel-body">
+        <p>
           Marque os ativos que <strong>você</strong> quer comprar, informe o valor do aporte e clique em <strong>Simular</strong>.
           A simulação usa apenas os ativos selecionados (das abas Ações e FIIs) e calcula quantas cotas comprar de cada um.
         </p>
-        <ul style="font-size:12px;color:var(--text2);line-height:1.9;margin-top:10px;padding-left:18px">
+        <ul style="font-size:12.5px;color:var(--text2);line-height:1.9;padding-left:18px;max-width:72ch">
           <li><strong style="color:var(--text)">Priorizar maior margem</strong> — distribui mais para os ativos mais descontados (abaixo do preço teto).</li>
           <li><strong style="color:var(--text)">Dividir igualmente</strong> — reparte o valor por igual entre todos os selecionados.</li>
         </ul>
@@ -395,9 +402,9 @@
 
   </main>
 
-  <footer style="text-align:center;padding:18px;font-size:12px;border-top:1px solid var(--footer-border);color:var(--footer-text);margin-top:16px">
-    <p>Baseado na metodologia do canal <strong style="color:var(--accent)">A Cara da Riqueza</strong> · Dados via <strong style="color:var(--accent)">Investidor10</strong></p>
-    <p style="margin-top:3px;font-size:11px">Não constitui recomendação de investimento.</p>
+  <footer class="app-footer">
+    <p>Baseado na metodologia do canal <strong>A Cara da Riqueza</strong> · Dados via <strong>Investidor10</strong></p>
+    <p class="disclaimer">Não constitui recomendação de investimento.</p>
   </footer>
 
 </div><!-- end app-wrapper -->

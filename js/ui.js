@@ -93,9 +93,27 @@ function openTickerLink(el, type) {
 }
 
 // ===== DELETE ROW =====
-function deleteRow(id, cb) {
+// Primeiro clique arma a confirmação (botão vira lixeira vermelha);
+// segundo clique em até 3s remove de fato.
+function deleteRow(id, cb, btn) {
   const el = document.getElementById(id);
-  if (el) { el.remove(); if (cb) cb(); }
+  if (!el) return;
+
+  if (btn && !btn.classList.contains('confirm')) {
+    btn.classList.add('confirm');
+    btn.innerHTML = '<i class="fa-solid fa-trash"></i> Confirmar?';
+    btn.title = 'Clique novamente para remover';
+    clearTimeout(btn._confirmT);
+    btn._confirmT = setTimeout(() => {
+      btn.classList.remove('confirm');
+      btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      btn.title = '';
+    }, 3000);
+    return;
+  }
+
+  el.remove();
+  if (cb) cb();
 }
 
 // ===== LOAD DATA INTO TABLES =====

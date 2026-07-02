@@ -29,7 +29,6 @@ function addAcoesRow(data) {
       <a class="ticker-link" onclick="openTickerLink(this,'acoes')" title="Abrir no Investidor10" tabindex="-1" style="cursor:pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK3" style="width:76px" oninput="updateAcoesRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
-      <button class="brapi-btn" onclick="fetchRowBrapi(${rid},'acoes')" title="Buscar Preço e LPA (brapi.dev)" tabindex="-1"><i class="fa-solid fa-rotate"></i></button>
     </div></td>
     <td><input class="table-input" data-f="preco"  inputmode="decimal" value="${vPreco}"  placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:88px"></td>
     <td><input class="table-input" data-f="lpa"    inputmode="decimal" value="${vLpa}"    placeholder="0,00" oninput="numericInput(this);updateAcoesRow(${rid})" style="width:72px"></td>
@@ -41,7 +40,7 @@ function addAcoesRow(data) {
     <td style="text-align:center"><span data-r="divFut" class="result-cell result-neutral" style="font-size:12px">—</span></td>
     <td style="text-align:center"><span data-r="teto"   class="result-cell preco-teto-cell">—</span></td>
     <td style="text-align:center"><span data-r="margem" class="result-cell result-neutral">—</span></td>
-    <td><span class="del-btn" onclick="deleteRow('acoes-row-${rid}',updateAcoesStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
+    <td><span class="del-btn" onclick="deleteRow('acoes-row-${rid}',updateAcoesStats,this)"><i class="fa-solid fa-xmark"></i></span></td>`;
 
   tbody.appendChild(tr);
   if (d.preco && d.lpa) updateAcoesRow(rid);

@@ -29,7 +29,6 @@ function addFiisRow(data) {
       <a class="ticker-link" onclick="openTickerLink(this,'fiis')" title="Abrir no Investidor10" tabindex="-1" style="cursor:pointer"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <input class="table-input ticker-input" data-f="ticker" value="${d.ticker}" placeholder="TICK11" style="width:76px" oninput="updateFiisRow(${rid})">
       <span data-r="star" style="display:inline-flex;align-items:center;width:16px;flex-shrink:0"></span>
-      <button class="brapi-btn" onclick="fetchRowBrapi(${rid},'fiis')" title="Buscar Preço, P/VP e Div.12M (brapi.dev)" tabindex="-1"><i class="fa-solid fa-rotate"></i></button>
     </div></td>
     <td><input class="table-input" data-f="pvp"      inputmode="decimal" value="${vPvp}"      placeholder="1,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:64px"></td>
     <td><input class="table-input" data-f="preco"    inputmode="decimal" value="${vPreco}"    placeholder="0,00" oninput="numericInput(this);updateFiisRow(${rid})" style="width:88px"></td>
@@ -40,7 +39,7 @@ function addFiisRow(data) {
     <td style="text-align:center"><span data-r="dyTotal" class="result-cell result-neutral" style="font-size:12px">—</span></td>
     <td style="text-align:center"><span data-r="teto"    class="result-cell preco-teto-cell">—</span></td>
     <td style="text-align:center"><span data-r="margem"  class="result-cell result-neutral">—</span></td>
-    <td><span class="del-btn" onclick="deleteRow('fiis-row-${rid}',updateFiisStats)"><i class="fa-solid fa-xmark"></i></span></td>`;
+    <td><span class="del-btn" onclick="deleteRow('fiis-row-${rid}',updateFiisStats,this)"><i class="fa-solid fa-xmark"></i></span></td>`;
 
   tbody.appendChild(tr);
   if (d.preco && d.div12m) updateFiisRow(rid);
